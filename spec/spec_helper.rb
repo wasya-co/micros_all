@@ -23,4 +23,17 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, :type => :controller
   # config.include FactoryBot::Syntax::Methods
 
+  config.include Capybara::DSL
+
 end
+
+Capybara.configure do |config|
+  config.default_max_wait_time = 5
+
+  config.app_host = "https://zerohedge.com"
+  config.run_server = false
+
+  config.default_driver = :remote_browser
+  config.javascript_driver = :remote_browser
+end
+

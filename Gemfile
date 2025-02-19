@@ -44,11 +44,6 @@ group :development, :test do
   gem 'irb', '>= 1.2.8'
   gem 'rspec-rails'
   gem 'selenium-webdriver', "~> 4.9.0"
-
-
-  ## From: https://stackoverflow.com/questions/24004728/getting-selenium-webdriver-to-use-chrome-in-rspec-rails
-  # gem 'chromedriver-helper'
-
 end
 
 group :development do

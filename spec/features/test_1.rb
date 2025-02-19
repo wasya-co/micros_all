@@ -1,33 +1,39 @@
 
 require 'capybara/rspec'
 require "selenium-webdriver"
-require 'capybara_helper'
+require 'spec_helper'
+# require 'capybara_helper'
 
 Capybara.default_max_wait_time = 10 # seconds
 
 RSpec.describe 'scrape zerohedge frontpage' do
 
   before :all do
-    ## Works, non-remote
-    Capybara.default_driver = :local_selenium_headless
-    options = Selenium::WebDriver::Options.chrome(args: ['--headless=new'])
-    @driver = Selenium::WebDriver.for :chrome, options: options
 
-    ## semi-works, remote
-    # Capybara.default_driver = :remote_selenium_headless
-    # options = Selenium::WebDriver::Options.chrome(args: ['--headless=new'])
-    # options.add_argument("--remote-debugging-port=9222")
-    # options.add_argument("--window-size=1400,1400")
-    # @driver = Selenium::WebDriver.for( :remote, {
-    #   url: "http://#{SELENIUM_HOST}:4444/wd/hub",
-    #   options: options,
-    # })
+    SELENIUM_HOST = '127.0.0.1'
+    Capybara.register_driver :remote_browser do |app|
+      client = Selenium::WebDriver::Remote::Http::Default.new
+      client.read_timeout = 200
+
+      options = Selenium::WebDriver::Firefox::Options.new
+      options.add_argument("--headless")
+      options.add_argument("--window-size=1400,1400")
+      options.add_argument("--no-sandbox")
+      options.add_argument("--disable-dev-shm-usage")
+
+      Capybara::Selenium::Driver.new(
+        app,
+        browser: :remote,
+        url: "http://#{SELENIUM_HOST}:4444/wd/hub",
+        options: options,
+      )
+    end
 
   end
 
   it 'sanity' do
     @headlines = []
-    visit 'https://www.zerohedge.com/'
+    visit '/'
 
     all("div[class^='ContributorArticleFeatured_container__']").each do |item|
       puts! item, 'item'
