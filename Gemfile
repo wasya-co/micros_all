@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.5'
 
+gem 'ahoy_matey'
 gem 'rails', '~> 6.1.0'
 gem 'puma', '~> 5.0'
 gem 'sass-rails', '>= 6'
@@ -21,7 +22,7 @@ gem 'devise',                         "~> 4.9.3"
 gem "omniauth-keycloak",              "~> 1.5.1"
 gem "omniauth-rails_csrf_protection", "~> 1.0.1"
 
-gem 'wco_models',   github: 'wasya-co/wco_models',     branch: '3.1.0'
+gem 'wco_models',   github: 'wasya-co/wco_models',     branch: '3.2.0'
 gem 'wco_hosting',  github: 'wasya-co/wco_hosting_rb', branch: '0.0.0'
 
 group :development, :test do

@@ -10,7 +10,7 @@ services:
       - type: bind
         source: ./volumes/mongo_development_data
         target: /data/db
-    restart: always
+    restart: 'no'
 
   localstack_development:
     environment:
@@ -29,4 +29,4 @@ services:
       - "${LOCALSTACK_VOLUME_DIR:-./volumes/localstack_development}:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
       - ./aws:/etc/localstack/init/ready.d
-    # restart: always
+    restart: 'no'

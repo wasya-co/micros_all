@@ -1,6 +1,6 @@
 
-STRIPE_PK = ''
-STRIPE_SK = ''
+STRIPE_PK = 'pk_test_qr1QPmSpLdBFt1F7itdWJOj3'
+STRIPE_SK = 'sk_test_ARuaXffdANoXLKAwUXDcp0v0'
 
 Stripe.api_key = ::STRIPE_SK
 Stripe.api_version = '2020-08-27'
