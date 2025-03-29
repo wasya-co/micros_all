@@ -1,9 +1,18 @@
 
-%h5 Welcome home.
+.application-home.flexwidth
 
-%ul
-  %li= link_to 'trading', '/trading'
-  %li= link_to 'hosting', '/hosting'
+  - if current_user
+    %h5 Hello.
+    %div.d-flex.pb-2
+      - if wco_email
+        .pr-3= link_to 'email', '/email'
+      - if iro
+        .pr-3= link_to 'trading', '/trading'
+      - if wco_hosting
+        .pr-3= link_to 'hosting', '/hosting'
 
-%hr
-= current_user.inspect
+
+  - else
+    Not logged in.
+
+  User: #{current_user.inspect}

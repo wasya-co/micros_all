@@ -17,6 +17,15 @@
 /log/*
 !/log/.keep
 
+/db/*.sqlite3
+/db/*.sqlite3-*
+
+/.env
+
+
+/log/*
+!/log/.keep
+
 /node_modules
 
 /public/assets
@@ -32,6 +41,12 @@
 /tmp/pids/*
 !/tmp/pids/.keep
 *trash
+
+vendor
+volumes/*
+!volumes/.keep
+
+wco_email_rb
 
 /yarn-error.log
 yarn-debug.log*

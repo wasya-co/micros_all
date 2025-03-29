@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+    - name: install psych
+      community.general.homebrew:
+        name: libyaml
+        state: present
+
+

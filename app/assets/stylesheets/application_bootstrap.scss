@@ -1,0 +1,148 @@
+/*
+ *= require vendor/bootstrap-4.6.2.min.css
+ *
+ *= require wco/Card
+ *= require ./a20240822-our-services
+ *= require ./a20240801-carousel-trees
+ *
+**/
+@import url('https://fonts.googleapis.com/css2?family=Shrikhand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Carattere&display=swap');
+
+/* fonts */
+
+@mixin font-carattere {
+  font-family: "Carattere", cursive;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 2em;
+}
+.font-carattere {
+  @include font-carattere;
+}
+@mixin font-shrikland {
+  font-family: "Shrikhand", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+.font-shrikland {
+  @include font-shrikland;
+}
+
+/* utils */
+
+.debug {
+  border: 1px dashed red;
+}
+.hide {
+  display: none;
+}
+
+/* Hero */
+.a20240727 section.Hero {
+  .hero-envelope {
+    background-position: center bottom;
+    background-size: cover;
+    background-image: url('https://d15g8hc4183yn4.cloudfront.net/wp-content/uploads/2024/07/27154134/1024x921-marble-envelope.jpg');
+
+    min-height: 400px;
+  }
+  .main-header {
+    .title {
+      @include font-shrikland;
+    }
+    .subtitle {
+      @include font-carattere;
+    }
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  @media only screen and (max-width: 576px) {
+    .hero-envelope {
+      display: none;
+    }
+    .main-header {
+      color: white;
+      min-height: 400px;
+
+      background-position: center bottom;
+      background-size: cover;
+      background-image: url('https://d15g8hc4183yn4.cloudfront.net/wp-content/uploads/2024/07/27154134/1024x921-marble-envelope.jpg');
+    }
+
+  }
+  @media only screen and (min-width: 576px) {
+    .main-header {
+      align-items: flex-start;
+      // min-height: 200px;
+    }
+  }
+
+
+}
+
+/* Features */
+.a20240727 section.Features {
+  margin-top: 2em;
+
+  .header {
+    @include font-shrikland;
+
+    .title::before,
+    .title::after {
+      display: block;
+      content: "";
+      border: 1px solid black;
+      width: 12%;
+      height: 0;
+      margin: 1em;
+    }
+
+    h3.title {
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .Card,
+  .empty-slot {
+    min-height: 11em;
+    text-align: center;
+    margin-bottom: 30px;
+
+    word-break: break-all;
+  }
+
+  .empty-slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  .thumbW {
+    margin: 1em 0;
+
+    i {
+      font-size: 64px;
+    }
+  }
+}
+
+.a20240802-contact-us {
+  .Btn {
+    margin-bottom: 0.5em;
+  }
+
+  .col-1 {
+    padding-top: 15px;
+
+    text-align: right;
+  }
+}
+

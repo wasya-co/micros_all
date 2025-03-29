@@ -1,12 +1,11 @@
 require "active_support/core_ext/integer/time"
 
+Rails.application.routes.default_url_options[:host] = "wasyaco.com"
+
 Rails.application.configure do
-
   config.cache_classes = true
-
-  config.eager_load = true
-
-  config.consider_all_requests_local       = false
+  config.eager_load    = true
+  config.consider_all_requests_local       = true
   config.action_controller.perform_caching = true
 
   # Ensures that a master key has been made available in either ENV["RAILS_MASTER_KEY"]
@@ -30,24 +29,19 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
-  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
-
-  # Include generic and useful information about system operation, but avoid logging too much
-  # information to avoid inadvertent exposure of personally identifiable information (PII).
   config.log_level = :info
-
-  # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
-  # Use a real queuing backend for Active Job (and separate queues per environment).
-  # config.active_job.queue_adapter     = :resque
-  # config.active_job.queue_name_prefix = "micros_email_production"
+  ## From: https://github.com/sidekiq/sidekiq/wiki/Active-Job#queues
+  config.active_job.queue_adapter = :sidekiq
+  config.active_job.queue_name_prefix = "wco_email_rb"
+  config.active_job.queue_name_delimiter = "_"
 
-  config.action_mailer.perform_caching = false
+  config.action_mailer.perform_caching = true
+  config.action_mailer.deliver_later_queue_name = "mailers"
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -58,29 +52,28 @@ Rails.application.configure do
   config.active_support.disallowed_deprecation = :log
   config.active_support.disallowed_deprecation_warnings = []
 
-  config.log_formatter = ::Logger::Formatter.new
+  # Use a different logger for distributed setups.
+  # require "syslog/logger"
+  # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
-  end
+  # config.log_formatter = ::Logger::Formatter.new
+  # logger               = ActiveSupport::Logger.new("log/#{ENV['APP_NAME']}-#{Rails.env}.log")
+  # logger.formatter     = config.log_formatter
+  # config.logger        = ActiveSupport::TaggedLogging.new(logger)
 end
-
-# Rails.application.config.middleware.use OmniAuth::Builder do
-#   provider :keycloak_openid, 'wco',
-#     client_options: {
-#       site: 'https://auth.wasya.co',
-#       realm: 'wco',
-#       base_url: '',
-#     },
-#     name: 'keycloak'
-# end
 
 Rails.application.config.middleware.use ExceptionNotification::Rack,
   email: {
     deliver_with: :deliver,
-    email_prefix: '[WcoH] ',
-    sender_address: %{"wco_hosting exceptionist" <no-reply@wasya.co>},
+    email_prefix: '[Email] ',
+    sender_address: %{micros_email <no-reply@wasya.co>},
     exception_recipients: %w{poxlovi@gmail.com}
   }
+
+if ENV['APP_NAME']
+  $stdout = File.new("log/#{ENV['APP_NAME']}-#{Rails.env}.log", 'w')
+  $stdout.sync = true
+end
+
+DEBUG = false
+
