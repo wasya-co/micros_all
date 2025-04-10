@@ -345,6 +345,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.10)
+    rack-cors (2.0.2)
+      rack (>= 2.0.0)
     rack-mini-profiler (2.3.4)
       rack (>= 1.2.0)
     rack-protection (3.1.0)
@@ -513,6 +515,7 @@ DEPENDENCIES
   omniauth-rails_csrf_protection (~> 1.0.1)
   psych (< 4)
   puma (~> 5.0)
+  rack-cors
   rack-mini-profiler (~> 2.0)
   rails (~> 6.1.0)
   rspec-rails
