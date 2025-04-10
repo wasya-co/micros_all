@@ -6,9 +6,9 @@ When assembled, it provides a system for administering one-click, turn-key app i
 == Repositories ==
 
 <pre>
-micros_all.git/hosting-0.0.0
+micros_all.git/hosting-x.x.x
   wco_hosting.git
-wasya_co_rb.git
+wasya_co_rb.git/x.x.x
 </pre>
 
 = Install =
