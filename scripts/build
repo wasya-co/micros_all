@@ -2,6 +2,8 @@
 
 set -ex
 
+echo $(date) > timestamp
+
 bundle
 
 git add .
@@ -9,3 +11,5 @@ git commit -m 'autocommit'
 git push
 
 bundle exec cap do3 deploy
+
+echo ok

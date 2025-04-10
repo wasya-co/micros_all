@@ -1,0 +1,18 @@
+
+# all_hosts:
+#   hosts:
+#     ant_1:
+#       ansible_host: 127.0.0.1
+#       http_port: 9001
+#       ansible_port: 9101
+#       ansible_user: root
+#     ant_2:
+#       ansible_host: 127.0.0.1
+#       http_port: 9002
+#       ansible_port: 9102
+#       ansible_user: root
+
+mac:
+  hosts:
+    mac:
+      ansible_host: 127.0.0.1

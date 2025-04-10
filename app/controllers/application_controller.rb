@@ -1,11 +1,23 @@
 
+##
+## This controller is not used!
+##
 class ApplicationController < ActionController::Base
 
   def home
-    # if !current_user
-    #   redirect_to new_user_session_path
-    #   return
-    # end
+    # flash[:notice] = 'okk'
+  end
+
+  def section
+    render "sections/#{params[:which]}", layout: 'bootstrap'
+  end
+
+  def sections_one
+    render 'sections/one', layout: 'bootstrap'
+  end
+
+  def sections_carousel
+    render 'sections/carousel', layout: 'bootstrap'
   end
 
   def test_exception

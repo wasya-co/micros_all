@@ -1,0 +1,121 @@
+
+html {
+  // background: white !important;
+}
+body {
+  background: transparent;
+}
+
+section.a20240822-our-services {
+  margin: 2em auto;
+
+  h5 {
+    text-align: center;
+  }
+
+  h4 {
+    font-family: cursive;
+    text-align: center;
+  }
+
+  .buttonW {
+    display: flex;
+    justify-content: center;
+  }
+  button.v202408 {
+    // From: https://getcssscan.com/css-buttons-examples
+    // <button class="button-25" role="button">Button 25</button>
+
+    background-color: #36A9AE;
+    background-image: linear-gradient(#37ADB2, #329CA0);
+    border: 1px solid #2A8387;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0 1px 1px;
+    color: #FFFFFF;
+    cursor: pointer;
+    display: block;
+    font-family: -apple-system,".SFNSDisplay-Regular","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 17px;
+    line-height: 100%;
+    margin: 0;
+    outline: 0;
+    padding: 11px 15px 12px;
+    text-align: center;
+    transition: box-shadow .05s ease-in-out,opacity .05s ease-in-out;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    // width: 100%;
+
+
+    &:hover {
+      box-shadow: rgba(255, 255, 255, 0.3) 0 0 2px inset, rgba(0, 0, 0, 0.4) 0 1px 2px;
+      text-decoration: none;
+      transition-duration: .15s, .15s;
+    }
+
+    &:active {
+      box-shadow: rgba(0, 0, 0, 0.15) 0 2px 4px inset, rgba(0, 0, 0, 0.4) 0 1px 1px;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: .6;
+    }
+
+    &:disabled:active {
+      pointer-events: none;
+    }
+
+    &:disabled:hover {
+      box-shadow: none;
+    }
+  }
+
+  .Card.v202408 {
+    background: rgba(255,255,255, 0.5);
+    // background: white;
+
+    // From: https://getcssscan.com/css-box-shadow-examples
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+
+    height: 400px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .descr {
+    border: 0;
+    height: 100%;
+
+    display: flex;
+    // align-items: center;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .header {
+    display: flex;
+    justify-content: center;
+
+    .title {
+      border-bottom: 2px solid gray;
+
+      text-align: center;
+
+      display: flex;
+      padding: 0 3em;
+      margin: 1em 0;
+    }
+  }
+
+  .row {
+    margin-bottom: 3em;
+  }
+
+}
+
+
