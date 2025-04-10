@@ -1,4 +1,52 @@
 GIT
+  remote: https://github.com/wasya-co/iron_warbler.git
+  revision: e7ef14c6b7034cd090aaddc4b7cb17cd78dcb388
+  branch: 2.3.0
+  specs:
+    iron_warbler (2.0.7.45)
+      business_time
+      cancancan (~> 3.5.0)
+      devise (~> 4.9.3)
+      distribution
+      exception_notification (~> 4.5.0)
+      haml (~> 6.3.0)
+      httparty (~> 0.21.0)
+      jbuilder (~> 2.11.0)
+      mongoid (~> 7.3.0)
+      omniauth (~> 2.1.1)
+      omniauth-keycloak (~> 1.5.1)
+      omniauth-rails_csrf_protection (~> 1.0.1)
+      rails (~> 6.1.0)
+      wco_models (~> 3.1.0)
+
+GIT
+  remote: https://github.com/wasya-co/wco_email_rb.git
+  revision: 4aeabc39b17880d9b56bf65fdab9226ea3fdd503
+  branch: 0.0.0
+  specs:
+    wco_email (0.1.1.94)
+      aws-sdk-s3
+      business_time
+      cancancan (~> 3.5.0)
+      devise (~> 4.9.3)
+      exception_notification (~> 4.5.0)
+      haml (~> 6.3.0)
+      httparty
+      jbuilder (~> 2.11.5)
+      kaminari-actionview
+      kaminari-mongoid (~> 1.0.1)
+      mail (~> 2.8.1)
+      mongoid (~> 7.3.0)
+      mongoid-autoinc (~> 6.0.3)
+      mongoid-paperclip (~> 0.1.0)
+      mongoid_paranoia (~> 0.6.0)
+      prawn
+      prawn-table
+      rails (~> 6.1.7)
+      sidekiq
+      wco_models (~> 3.1.0)
+
+GIT
   remote: https://github.com/wasya-co/wco_hosting_rb.git
   revision: 8c06f6632a8e2138af2977d448c3a6459cb2191e
   branch: 0.0.0
@@ -178,7 +226,6 @@ GEM
     concurrent-ruby (1.3.4)
     connection_pool (2.5.0)
     crass (1.0.6)
-    csv (3.3.3)
     date (3.4.0)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
@@ -190,6 +237,7 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.5.0)
+    distribution (0.8.0)
     droplet_kit (3.20.0)
       faraday (>= 0.15)
       faraday-retry (~> 2.2.0)
@@ -219,8 +267,7 @@ GEM
       thor
       tilt
     hashie (5.0.0)
-    httparty (0.23.1)
-      csv
+    httparty (0.21.0)
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     i18n (1.14.6)
@@ -504,6 +551,7 @@ DEPENDENCIES
   exception_notification (~> 4.5.0)
   ffi (~> 1.16.3)
   irb (>= 1.2.8)
+  iron_warbler!
   jbuilder (~> 2.7)
   kaminari-mongoid (~> 1.0.1)
   mongoid (~> 7.3.0)
@@ -520,6 +568,7 @@ DEPENDENCIES
   rails (~> 6.1.0)
   rspec-rails
   sass-rails (>= 6)
+  wco_email!
   wco_hosting!
   wco_models!
   web-console (>= 4.1.0)
