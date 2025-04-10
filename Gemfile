@@ -21,6 +21,9 @@ gem 'psych', '< 4'
 gem 'devise',                         "~> 4.9.3"
 gem "omniauth-keycloak",              "~> 1.5.1"
 gem "omniauth-rails_csrf_protection", "~> 1.0.1"
+gem 'ed25519', '~> 1.3.0'
+gem 'bcrypt_pbkdf', '~> 1.1.0'
+gem 'ffi', '~> 1.16.3'
 
 gem 'wco_models',   github: 'wasya-co/wco_models',     branch: '3.2.0'
 gem 'wco_hosting',  github: 'wasya-co/wco_hosting_rb', branch: '0.0.0'
