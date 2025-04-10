@@ -15,8 +15,6 @@ Rails.application.routes.draw do
   get '/sections/one', to: 'application#sections_one'
   get '/sections/:which', to: 'application#section'
 
-  mount Sidekiq::Web     => '/sidekiq'
-  mount Wco::Engine      => '/wco'
 
   mount WcoEmail::Engine   => '/email'
   mount WcoHosting::Engine => '/hosting'
