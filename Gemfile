@@ -32,6 +32,7 @@ gem "omniauth-rails_csrf_protection", "~> 1.0.1" # required by wco_email, by key
 gem 'ed25519', '~> 1.3.0'
 gem 'bcrypt_pbkdf', '~> 1.1.0'
 gem 'ffi', '~> 1.16.3'
+gem 'stringio', '3.1.2'
 
 gem 'wco_models',   github: 'wasya-co/wco_models',     branch: '3.2.0'
 gem 'wco_email',    github: 'wasya-co/wco_email_rb',   branch: '0.0.0'

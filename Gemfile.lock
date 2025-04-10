@@ -519,7 +519,7 @@ GEM
       net-sftp (>= 2.1.2)
       net-ssh (>= 2.8.0)
       ostruct
-    stringio (3.1.1)
+    stringio (3.1.2)
     stripe (10.4.0)
     temple (0.10.3)
     terrapin (1.0.1)
@@ -589,6 +589,7 @@ DEPENDENCIES
   sass-rails
   selenium-webdriver (~> 4.9.0)
   sidekiq
+  stringio (= 3.1.2)
   wco_email!
   wco_hosting!
   wco_models!
