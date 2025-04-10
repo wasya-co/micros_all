@@ -1,10 +1,10 @@
 lock "~> 3.19.1"
 
-set :application, "micros_trading"
-set :repo_url,    "git@github.com:wasya-co/micros_email.git"
-set :branch,      ENV['BRANCH'] || 'trading-0.0.0'
+set :application, "micros_hosting"
+set :repo_url,    "git@github.com:wasya-co/micros_all.git"
+set :branch,      ENV['BRANCH'] || 'hosting-0.0.0'
 set :deploy_via,  :remote_cache
-set :deploy_to,   "/opt/projects/micros_trading"
+set :deploy_to,   "/opt/projects/micros_hosting"
 
 append :linked_files, "log/production.log",
   "config/master.key",
