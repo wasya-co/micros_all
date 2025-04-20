@@ -32,6 +32,7 @@ gem 'stringio', '3.1.2'
 # gem 'rb-gsl'
 
 gem 'wco_models', github: 'wasya-co/wco_models',   branch: '3.2.0'
+gem 'iron_warbler', github: 'wasya-co/iron_warbler',   branch: '2.3.0'
 
 group :development, :test do
   gem 'byebug'
