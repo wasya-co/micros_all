@@ -30,7 +30,7 @@ gem 'ed25519', '~> 1.3.0'
 gem 'bcrypt_pbkdf', '~> 1.1.0'
 gem 'stringio', '~> 3.1.1'
 
-gem 'wco_models', github: 'wasya-co/wco_models',   branch: '3.1.0'
+gem 'wco_models', github: 'wasya-co/wco_models',   branch: '3.2.0'
 
 group :development, :test do
   gem 'byebug'
