@@ -28,7 +28,8 @@ gem "omniauth-rails_csrf_protection", "~> 1.0.1"
 gem 'sidekiq'
 gem 'ed25519', '~> 1.3.0'
 gem 'bcrypt_pbkdf', '~> 1.1.0'
-gem 'stringio', '~> 3.1.1'
+gem 'stringio', '3.1.2'
+# gem 'rb-gsl'
 
 gem 'wco_models', github: 'wasya-co/wco_models',   branch: '3.2.0'
 

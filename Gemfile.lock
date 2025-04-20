@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/wasya-co/wco_models.git
-  revision: d21a8485c720a8a7f1402962219eb0ce8cceb8ea
+  revision: a01700d8bc41c1389897be41386a76492edf99cf
   branch: 3.2.0
   specs:
-    wco_models (3.1.0.207)
+    wco_models (3.1.0.210)
       ahoy_matey
       aws-sdk-s3
       business_time
@@ -405,7 +405,7 @@ GEM
     sshkit (1.21.6)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
-    stringio (3.1.1)
+    stringio (3.1.2)
     stripe (10.4.0)
     temple (0.10.3)
     terrapin (1.1.0)
@@ -464,7 +464,7 @@ DEPENDENCIES
   rails (~> 6.1.0)
   sass-rails
   sidekiq
-  stringio (~> 3.1.1)
+  stringio (= 3.1.2)
   wco_models!
   web-console (>= 4.1.0)
 
