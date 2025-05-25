@@ -70,10 +70,10 @@ GIT
 
 GIT
   remote: https://github.com/wasya-co/wco_models.git
-  revision: a01700d8bc41c1389897be41386a76492edf99cf
-  branch: 3.2.0
+  revision: 2e6736d4d4289cb308d959127c49335cec010069
+  branch: 3.2.1
   specs:
-    wco_models (3.1.0.210)
+    wco_models (3.1.0.211)
       ahoy_matey
       aws-sdk-s3
       business_time
@@ -369,6 +369,9 @@ GEM
       rack (>= 1.2, < 4)
       snaky_hash (~> 2.0)
       version_gem (~> 1.1)
+    oj (3.16.10)
+      bigdecimal (>= 3.0)
+      ostruct (>= 0.2)
     omniauth (2.1.1)
       hashie (>= 3.4.6)
       rack (>= 2.2.3)
@@ -530,6 +533,10 @@ GEM
     timeout (0.4.1)
     ttfunk (1.8.0)
       bigdecimal (~> 3.1)
+    typesense (3.1.0)
+      base64 (~> 0.2.0)
+      faraday (~> 2.8)
+      oj (~> 3.16)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     version_gem (1.1.3)
@@ -577,6 +584,7 @@ DEPENDENCIES
   mongoid-autoinc (~> 6.0.3)
   mongoid-paperclip (~> 0.1.0)
   mongoid_paranoia (~> 0.6.0)
+  net-imap
   nokogiri (~> 1.15.5)
   omniauth-keycloak (~> 1.5.1)
   omniauth-rails_csrf_protection (~> 1.0.1)
@@ -590,6 +598,7 @@ DEPENDENCIES
   selenium-webdriver (~> 4.9.0)
   sidekiq
   stringio (= 3.1.2)
+  typesense
   wco_email!
   wco_hosting!
   wco_models!
