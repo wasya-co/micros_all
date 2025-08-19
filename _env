@@ -1,5 +1,7 @@
 
 export PORT=3002
+export IMAP_USER = '<a@b.c>'
+export IMAP_PASSWD = '<>'
 
 # export WP_HOST=https://piousbox.com
 # export WP_USERNAME=art-donor

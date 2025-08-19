@@ -48,7 +48,7 @@ GIT
 
 GIT
   remote: https://github.com/wasya-co/wco_hosting_rb.git
-  revision: 8c06f6632a8e2138af2977d448c3a6459cb2191e
+  revision: f85e1e339b3ee138e6b7f961a7cb68d84388b41a
   branch: 0.0.0
   specs:
     wco_hosting (0.0.0.27)
@@ -70,10 +70,10 @@ GIT
 
 GIT
   remote: https://github.com/wasya-co/wco_models.git
-  revision: 2e6736d4d4289cb308d959127c49335cec010069
+  revision: a809fae83598e476c561b126d457a0768e0f5ce3
   branch: 3.2.1
   specs:
-    wco_models (3.1.0.211)
+    wco_models (3.1.0.212)
       ahoy_matey
       aws-sdk-s3
       business_time
