@@ -5,10 +5,8 @@ See the docs/ folder.
 
 == Install ==
 
-  python3 -m venv zenv
-  . zenv/bin/activate
-  pip install ansible
-  ansible-playbook
+=== localstack ===
+  See the docs/ folder.
 
 == Test ==
 
