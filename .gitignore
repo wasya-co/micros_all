@@ -1,4 +1,6 @@
 
+access
+
 /.bundle
 .byebug_history
 
@@ -13,6 +15,7 @@
 
 /.env
 
+google-services.json
 
 /log/*
 !/log/.keep

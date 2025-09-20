@@ -35,6 +35,7 @@ gem 'ffi', '~> 1.16.3'
 gem 'stringio', '3.1.2'
 gem 'net-imap'
 gem 'typesense'
+gem 'googleauth'
 
 gem 'wco_models',   github: 'wasya-co/wco_models',     branch: '3.2.1'
 gem 'wco_email',    github: 'wasya-co/wco_email_rb',   branch: '0.0.0'

@@ -21,10 +21,10 @@ GIT
 
 GIT
   remote: https://github.com/wasya-co/wco_email_rb.git
-  revision: 6e33c117320bdabc96d6c3b76f2af26e28b4beea
+  revision: 8f8eee60ffc3126fb633c9a316aaf6553c560733
   branch: 0.0.0
   specs:
-    wco_email (0.1.1.95)
+    wco_email (0.1.1.97)
       aws-sdk-s3
       business_time
       cancancan (~> 3.5.0)
@@ -265,6 +265,15 @@ GEM
     ffi (1.16.3)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google-cloud-env (2.1.1)
+      faraday (>= 1.0, < 3.a)
+    googleauth (1.11.2)
+      faraday (>= 1.0, < 3.a)
+      google-cloud-env (~> 2.1)
+      jwt (>= 1.4, < 3.0)
+      multi_json (~> 1.11)
+      os (>= 0.9, < 2.0)
+      signet (>= 0.16, < 2.a)
     haml (6.3.0)
       temple (>= 0.8.2)
       thor
@@ -344,6 +353,7 @@ GEM
       mongoid
     mongoid_paranoia (0.6.0)
       mongoid (>= 7.3)
+    multi_json (1.15.0)
     multi_xml (0.6.0)
     net-imap (0.4.17)
       date
@@ -389,6 +399,7 @@ GEM
       actionpack (>= 4.2)
       omniauth (~> 2.0)
     orm_adapter (0.5.0)
+    os (1.1.4)
     ostruct (0.6.0)
     pdf-core (0.10.0)
     prawn (2.5.0)
@@ -507,6 +518,11 @@ GEM
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
       redis-client (>= 0.19.0)
+    signet (0.19.0)
+      addressable (~> 2.8)
+      faraday (>= 0.17.5, < 3.a)
+      jwt (>= 1.5, < 3.0)
+      multi_json (~> 1.10)
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
@@ -575,6 +591,7 @@ DEPENDENCIES
   ed25519 (~> 1.3.0)
   exception_notification
   ffi (~> 1.16.3)
+  googleauth
   irb (>= 1.2.8)
   iron_warbler!
   jbuilder (~> 2.7)
