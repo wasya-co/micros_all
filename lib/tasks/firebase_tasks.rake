@@ -19,7 +19,7 @@ namespace :firebase do
     puts "Access Token: #{authorizer.access_token}"
 
 
-    uri = URI("https://fcm.googleapis.com/v1/projects/ish-notifier/messages:send")
+    uri = URI("https://fcm.googleapis.com/v1/projects/ish-notifier-472722/messages:send")
     header = {
       "Content-Type" => "application/json",
       "Authorization" => "Bearer #{authorizer.access_token}"
