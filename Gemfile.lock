@@ -70,10 +70,10 @@ GIT
 
 GIT
   remote: https://github.com/wasya-co/wco_models.git
-  revision: 8fb16aedeaabaa4e2059acd979599edd3243a193
+  revision: 3c305fb4f90c892dfed8eab8586a035bbe845d20
   branch: 3.2.1
   specs:
-    wco_models (3.1.0.216)
+    wco_models (3.1.0.217)
       ahoy_matey
       aws-sdk-s3
       business_time
