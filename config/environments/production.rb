@@ -80,5 +80,5 @@ if ENV['APP_NAME']
   $stdout.sync = true
 end
 
-DEBUG = false
+DEBUG = true
 
