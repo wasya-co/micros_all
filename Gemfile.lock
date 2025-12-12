@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/wasya-co/iron_warbler.git
-  revision: e7ef14c6b7034cd090aaddc4b7cb17cd78dcb388
+  revision: c029104090f7b78bb2c8decb81fd914f07261f34
   branch: 2.3.0
   specs:
     iron_warbler (2.0.7.45)
@@ -70,10 +70,10 @@ GIT
 
 GIT
   remote: https://github.com/wasya-co/wco_models.git
-  revision: 3c305fb4f90c892dfed8eab8586a035bbe845d20
+  revision: d782620860b64e8f1820743687cf4bdcf246f59e
   branch: 3.2.1
   specs:
-    wco_models (3.1.0.217)
+    wco_models (3.1.0.218)
       ahoy_matey
       aws-sdk-s3
       business_time
