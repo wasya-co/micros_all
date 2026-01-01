@@ -61,9 +61,10 @@ Rails.application.configure do
   # require "syslog/logger"
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
-  logger                  = ActiveSupport::Logger.new("log/#{ENV['APP_NAME']}-#{Rails.env}.log")
-  config.logger           = ActiveSupport::TaggedLogging.new(logger)
-  # config.logger           = ActiveSupport::Logger.new(STDOUT)
+  # logger                  = ActiveSupport::Logger.new("log/#{ENV['APP_NAME']}-#{Rails.env}.log")
+  # config.logger           = ActiveSupport::TaggedLogging.new(logger)
+
+  config.logger           = ActiveSupport::Logger.new(STDOUT)
 
   config.log_formatter    = ::Logger::Formatter.new
   config.logger.formatter = config.log_formatter
