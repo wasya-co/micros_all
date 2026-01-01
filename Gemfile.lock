@@ -70,10 +70,10 @@ GIT
 
 GIT
   remote: https://github.com/wasya-co/wco_models.git
-  revision: 322c9a056bbc5d89429b70fe3e119cdde9752115
+  revision: 2b532b7456b1863acd254c5cd77f6673a5cd190a
   branch: 3.3.0
   specs:
-    wco_models (3.1.0.224)
+    wco_models (3.1.0.225)
       ahoy_matey
       aws-sdk-s3
       business_time
@@ -402,6 +402,7 @@ GEM
     os (1.1.4)
     ostruct (0.6.0)
     pdf-core (0.10.0)
+    pragmatic_segmenter (0.3.24)
     prawn (2.5.0)
       matrix (~> 0.4)
       pdf-core (~> 0.10.0)
@@ -607,6 +608,7 @@ DEPENDENCIES
   nokogiri (~> 1.15.5)
   omniauth-keycloak (~> 1.5.1)
   omniauth-rails_csrf_protection (~> 1.0.1)
+  pragmatic_segmenter (= 0.3.24)
   psych (~> 5.0.1)
   puma (~> 5.0)
   rack-cors

@@ -37,6 +37,7 @@ gem 'net-imap'
 gem 'typesense'
 gem 'googleauth'
 gem 'net-ssh'
+gem 'pragmatic_segmenter', '0.3.24'
 
 gem 'wco_models',   github: 'wasya-co/wco_models',     branch: '3.3.0'
 gem 'wco_email',    github: 'wasya-co/wco_email_rb',   branch: '0.0.0'

@@ -117,15 +117,19 @@
         const div = document.createElement('div');
         div.className = 'photo';
 
+        // action="/wco/api/newsvideos/${params.get('newsvideo_id')}/generate-illustration"
+
         div.innerHTML = `
-          <a href="/wco/newsvideos/${params.get('newsvideo_id')}/generate-illustration?image_url=${photo.src.landscape}" target="_blank" rel="noopener">
-            <div class="photo-frame">
-              <img src="${photo.src.landscape}" alt="${photo.alt || ''}">
-            </div>
-          </a>
-          <div class="caption">
-            Photo by ${photo.photographer}
-          </div>
+        <form
+          action="/wco/newsvideos/${params.get('newsvideo_id')}/generate-illustration"
+          method="post"
+          target="_blank"
+          rel="noopener"
+        >
+          <input type="hidden" name="image_url" value="${photo.src.landscape}">
+          <img class='photo-frame' src="${photo.src.landscape}" alt="${photo.alt || ''}">
+          <button type="submit" class="photo-frame-button">Generate</button>
+        </form>
         `;
 
         results.appendChild(div);
