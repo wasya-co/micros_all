@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/wasya-co/iron_warbler.git
-  revision: c029104090f7b78bb2c8decb81fd914f07261f34
+  revision: b6702bc981692d0829081445aea41e5d5be7f2fd
   branch: 2.3.0
   specs:
-    iron_warbler (2.0.7.45)
+    iron_warbler (2.0.7.46)
       business_time
       cancancan (~> 3.5.0)
       devise (~> 4.9.3)
@@ -70,10 +70,10 @@ GIT
 
 GIT
   remote: https://github.com/wasya-co/wco_models.git
-  revision: 25598b47e99746d0d7e92040a1b380ee7fd685ea
-  branch: 3.2.1
+  revision: 21bfdfdda828f27e2b6f904548fa6a2f4e21a264
+  branch: 3.3.0
   specs:
-    wco_models (3.1.0.220)
+    wco_models (3.1.0.223)
       ahoy_matey
       aws-sdk-s3
       business_time
@@ -603,6 +603,7 @@ DEPENDENCIES
   mongoid-paperclip (~> 0.1.0)
   mongoid_paranoia (~> 0.6.0)
   net-imap
+  net-ssh
   nokogiri (~> 1.15.5)
   omniauth-keycloak (~> 1.5.1)
   omniauth-rails_csrf_protection (~> 1.0.1)

@@ -10,3 +10,7 @@ export IMAP_PASSWD = '<>'
 # export WP_HOST=http://localhost:8019
 # export WP_USERNAME=piousbox
 # export WP_PASSWORD=test1234
+
+WCO_API_KEY
+WCO_API_SECRET
+
