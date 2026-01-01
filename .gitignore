@@ -37,7 +37,7 @@ google-services.json
 !/tmp/pids/.keep
 *trash
 
-vendor
+/vendor
 volumes/*
 !volumes/.keep
 
