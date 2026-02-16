@@ -1,4 +1,4 @@
 0.0.0       :: 2023-12-15 :: start
 email-0.0.0 :: 2023-12-16 :: same as 0.0.0
 email-0.0.1 ::            :: lighter? removed chromedriver
-
+email-0.1.0 :: 2026-02-13 :: upgrading to ruby 3.4.2
