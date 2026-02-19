@@ -17,7 +17,7 @@
     = csp_meta_tag
   %body
 
-    = render '/wco/alerts_notices' if notice || alert
+    = render '/wco/application/alerts_notices' if notice || alert
 
     %hr
     = yield
