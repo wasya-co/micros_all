@@ -1,19 +1,21 @@
 lock "~> 3.18.0"
 
 set :application, "micros_content"
-set :repo_url,    "git@github.com:wasya-co/micros_any.git"
+set :repo_url,    "git@github.com:wasya-co/micros_all.git"
 set :branch,      ENV['BRANCH'] || 'content-0.1.0'
 set :deploy_via,  :remote_cache
 set :deploy_to,   "/opt/projects/micros_content"
 
-append :linked_files, "log/production.log",
-  ".bundle/config", # github key
+append :linked_files, ".bundle/config", # github key
+  "config/credentials.yml.enc",
   "config/initializers/00_s3.rb",
   "config/initializers/05_stripe.rb",
   "config/initializers/08_integrations.rb",
-  "config/initializers/action_mailer.rb",
+  "config/initializers/09_action_mailer.rb",
   "config/master.key",
-  "config/mongoid.yml"
+  "config/mongoid.yml",
+
+  "log/production.log",
 
 namespace :deploy do
   task :bundle do
