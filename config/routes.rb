@@ -8,7 +8,7 @@ end
 Rails.application.routes.draw do
   root to: 'application#home'
 
-
+  mount Iro::Engine      => '/trading'
   mount Sidekiq::Web     => '/sidekiq'
   mount Wco::Engine      => '/wco'
 

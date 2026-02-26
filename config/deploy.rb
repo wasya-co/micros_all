@@ -14,8 +14,7 @@ append :linked_files, ".bundle/config", # github key
   "config/initializers/09_action_mailer.rb",
   "config/master.key",
   "config/mongoid.yml",
-
-  "log/production.log",
+  "log/production.log"
 
 namespace :deploy do
   task :bundle do
