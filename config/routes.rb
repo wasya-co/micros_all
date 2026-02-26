@@ -8,9 +8,9 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   root to: 'application#home'
 
-  get '/sections/carousel',   to: 'application#sections_carousel'
-  get '/sections/one', to: 'application#sections_one'
-  get '/sections/:which', to: 'application#section'
+  get '/sections/carousel', to: 'application#sections_carousel'
+  get '/sections/one',      to: 'application#sections_one'
+  get '/sections/:which',   to: 'application#section'
 
 
   mount WcoEmail::Engine   => '/email'
