@@ -13,10 +13,18 @@ Rails.application.routes.draw do
   get '/sections/:which',   to: 'application#section'
 
 
-  mount WcoEmail::Engine   => '/email'
-  mount WcoHosting::Engine => '/hosting'
-  mount Iro::Engine        => '/trading'
-  mount Sidekiq::Web       => '/sidekiq'
+  if defined?( WcoEmail::Engine )
+    mount WcoEmail::Engine   => '/email'
+  end
+  if defined?( WcoHosting::Engine )
+    mount WcoHosting::Engine => '/hosting'
+  end
+  if defined?( Iro::Engine )
+    mount Iro::Engine        => '/trading'
+  end
+  if defined?( Sidekiq::Web )
+    mount Sidekiq::Web       => '/sidekiq'
+  end
   mount Wco::Engine        => '/wco'
 
   post '/api/email/messages/from-ses', to: 'wco_email/api#create_email_message'

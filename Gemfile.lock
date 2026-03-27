@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/wasya-co/iron_warbler.git
-  revision: 33195c112853ed4f16ba59d1a1ee8bb8803ed81d
+  revision: 0197cd9b59c1ae5d23d78b4f90cf7cb809114d6b
   branch: 2.3.0
   specs:
     iron_warbler (2.0.7.46)
@@ -21,10 +21,10 @@ GIT
 
 GIT
   remote: https://github.com/wasya-co/wco_email_rb.git
-  revision: a786fdbe2f09e49b848689e0f77e3d1edd1c7111
+  revision: 0e7ed5b2897102d6bec4e129363048958712e147
   branch: 0.0.0
   specs:
-    wco_email (0.1.1.100)
+    wco_email (0.1.1.102)
       aws-sdk-s3
       business_time
       cancancan (~> 3.5.0)
@@ -70,10 +70,10 @@ GIT
 
 GIT
   remote: https://github.com/wasya-co/wco_models.git
-  revision: c5a81d1cc1bb38d421228310b81e78a145490a21
-  branch: 3.3.0
+  revision: 57cabd25b8981b49d46d0ee250307d82434fb6dc
+  branch: 3.3.1
   specs:
-    wco_models (3.1.0.240)
+    wco_models (3.1.0.246)
       ahoy_matey
       aws-sdk-s3
       business_time
@@ -172,8 +172,8 @@ GEM
     airbrussh (1.5.3)
       sshkit (>= 1.6.1, != 1.7.0)
     aws-eventstream (1.4.0)
-    aws-partitions (1.1200.0)
-    aws-sdk-core (3.240.0)
+    aws-partitions (1.1231.0)
+    aws-sdk-core (3.244.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
@@ -181,11 +181,11 @@ GEM
       bigdecimal
       jmespath (~> 1, >= 1.6.1)
       logger
-    aws-sdk-kms (1.118.0)
-      aws-sdk-core (~> 3, >= 3.239.1)
+    aws-sdk-kms (1.123.0)
+      aws-sdk-core (~> 3, >= 3.244.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.209.0)
-      aws-sdk-core (~> 3, >= 3.234.0)
+    aws-sdk-s3 (1.217.0)
+      aws-sdk-core (~> 3, >= 3.244.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.12.1)

@@ -2,3 +2,7 @@
 email-0.0.0 :: 2023-12-16 :: same as 0.0.0
 email-0.0.1 ::            :: lighter? removed chromedriver
 
+email-0.0.2 :: 2026-03-27 :: wiring postal in here.
+                             what's the other one, 0.1.0 ?
+
+

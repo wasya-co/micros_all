@@ -17,6 +17,8 @@ access
 
 google-services.json
 
+/inventory.yml
+
 /log/*
 !/log/.keep
 
@@ -37,6 +39,8 @@ google-services.json
 !/tmp/pids/.keep
 *trash
 
+/vars/*
+!/vars/*example
 /vendor
 volumes/*
 !volumes/.keep

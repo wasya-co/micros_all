@@ -11,15 +11,14 @@ append :linked_files, ".bundle/config", # github key
   "config/initializers/05_stripe.rb",
   "config/initializers/08_integrations.rb",
   "config/initializers/09_action_mailer.rb",
-
+  "config/mongoid.yml",
   "log/micros_email-production.log",
   "log/nginx-production.log",
   "log/production.log",
   "log/rea-production.log",
   "log/roa-production.log",
-  "log/sendctxs-production.log",
+  "log/sendctxs-production.log"
 
-  "config/mongoid.yml"
 
 namespace :deploy do
   task :bundle do

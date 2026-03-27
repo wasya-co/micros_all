@@ -1,0 +1,13 @@
+---
+- hosts: ubuntu
+  tasks:
+    - include_role:
+        name: roles/wco
+        tasks_from: common_packages
+    - include_role:
+        name: roles/wco
+        tasks_from: common_config
+    - include_role:
+        name: roles/wco
+        tasks_from: enable_swap
+
