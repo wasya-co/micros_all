@@ -3,3 +3,5 @@
 AWS_SES_LAMBDA_KEY = '
 AWS_SES_LAMBDA_SECRET = ''
 
+DEFAULT_BCC = 'victor@wasya.co'
+

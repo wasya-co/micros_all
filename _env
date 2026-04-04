@@ -3,6 +3,9 @@ export PORT=3002
 export IMAP_USER = '<a@b.c>'
 export IMAP_PASSWD = ''
 
+## for cancan
+EMAIL
+
 WCO_API_KEY
 WCO_API_SECRET
 
