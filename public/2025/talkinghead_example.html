@@ -5,6 +5,29 @@
     body {
       background: #efefef;
     }
+    .camera-helper {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.75);
+      border-radius: 8px;
+      z-index: 9999;
+    }
+    .camera-helper button {
+      min-width: 52px;
+      padding: 6px 8px;
+      border: 1px solid #666;
+      border-radius: 4px;
+      background: #fff;
+      color: #111;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+    }
   </style>
 
   <!-- Import maps polyfill -->
@@ -30,6 +53,14 @@
   <button id='speak'>Speak</button>
   <div id='avatar'></div>
   <div id='loading'>Loading...</div>
+  <div class="camera-helper">
+    <button data-axis="y" data-delta="10">+y</button>
+    <button data-axis="y" data-delta="-10">-y</button>
+    <button data-axis="x" data-delta="10">+x</button>
+    <button data-axis="x" data-delta="-10">-x</button>
+    <button data-axis="z" data-delta="10">+z</button>
+    <button data-axis="z" data-delta="-10">-z</button>
+  </div>
   <div id="rotatingC" class="r2" style="width: 640px;
     height: 480px;
     border: 1px solid red;
@@ -73,31 +104,38 @@
     const api_secret = params.get('api_secret')
     const wco_origin = params.get('wco_origin')
     const newspartial_id = params.get('newspartial_id')
-    let totalFrames
+    let totalFrames = Number.POSITIVE_INFINITY
 
-    let camera, controls, head, renderer, scene;
+    let camera, capturing, controls, head, renderer, scene;
     var capturer = new CCapture( { format: 'webm', framerate: FPS } );
+    const CAMERA_STEP = 0.05;
+
+    function setupCameraHelper() {
+      const helperButtons = document.querySelectorAll('.camera-helper button');
+      helperButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const axis = button.dataset.axis;
+          const direction = Number(button.dataset.delta);
+          camera.position[axis] += direction * CAMERA_STEP;
+          controls.update();
+        });
+      });
+    }
+
 
     async function init() {
-      const url = wco_origin + '/wco/api/newspartials/' + newspartial_id + '/config.json?api_key=' + api_key + '&api_secret=' + api_secret
-      let chunkedInput = await fetch(url).then(r => r.json())
-      logg(chunkedInput, 'chunkedInput')
-      const last = chunkedInput.wtimes.length-1
-      const duration_ms = chunkedInput.wtimes[last] + chunkedInput.wdurations[last]
-      logg(duration_ms, 'duration_ms')
-      totalFrames = duration_ms/1000*FPS;
-
-
       // const container = document.createElement( 'div' )
       const loader = new GLTFLoader().setPath( '/vendor/models' )
       scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xd3d3d3); // light gray
+
 
       /* fov — Camera frustum vertical field of view.
        * aspect — Camera frustum aspect ratio.
        * near — Camera frustum near plane.
        * far — Camera frustum far plane.
       **/
-      camera = new THREE.PerspectiveCamera( 10, w/h, 0.1, 10 )
+      camera = new THREE.PerspectiveCamera( 10, w/h, 0.001, 1000 )
       camera.position.set( 1.86, 1.44, 1.00 )
       camera.rotation.set( -.06, 0.73, 0.04 )
 
@@ -107,8 +145,6 @@
       // const pointLight = new THREE.PointLight( 0xffffff, 15 );
       // camera.add( pointLight );
       // scene.add( camera );
-
-
 
       // loader.load( '/cyberpunk-laptop/cyberpunk-laptop.glb', function ( gltf ) {
       //   $("#rotatingC span.label").css('display', 'none')
@@ -135,8 +171,7 @@
       try {
         nodeLoading.textContent = "Loading...";
         await head.showAvatar( {
-          // url: 'https://models.readyplayer.me/64bfa15f0e72c63d7c3934a6.glb?morphTargets=ARKit,Oculus+Visemes,mouthOpen,mouthSmile,eyesClosed,eyesLookUp,eyesLookDown&textureSizeLimit=1024&textureFormat=png',
-          url: '/vendor/models/2026/zhenja/model.glb',
+          url: '/vendor/models/2026/julia.glb',
           body: 'F',
           avatarMood: 'neutral',
           lipsyncLang: 'en'
@@ -153,19 +188,16 @@
         scene.add(head.armature);
 
         await head.streamStart({
-              sampleRate: config.sampleRate,
-              mood: config.mood,
-              gain: config.gain,
-              lipsyncType: config.lipsyncType,
-              lipsyncLang: config.lipsyncLang,
-              waitForAudioChunks: config.waitForAudioChunks,
-              // Configure metrics: enabled/disabled and reporting rate
-              metrics: config.enableMetrics ? { enabled: true, intervalHz: config.metricsInterval } : { enabled: false }
-            })
+          sampleRate: config.sampleRate,
+          mood: config.mood,
+          gain: config.gain,
+          lipsyncType: config.lipsyncType,
+          lipsyncLang: config.lipsyncLang,
+          waitForAudioChunks: config.waitForAudioChunks,
+          // Configure metrics: enabled/disabled and reporting rate
+          metrics: config.enableMetrics ? { enabled: true, intervalHz: config.metricsInterval } : { enabled: false }
+        })
 
-        capturer.start();
-        logg('capturer.start')
-        head.streamAudio(chunkedInput);
 
       } catch (error) {
         console.log(error);
@@ -194,13 +226,12 @@
       controls.maxDistance = 100;
       controls.autoRotate = false;
       controls.update();
+      setupCameraHelper();
 
       //
 
       window.addEventListener( 'resize', onWindowResize );
 
-
-      // renderer.setAnimationLoop(animate);
       animate()
     }
 
@@ -228,48 +259,67 @@
       head.animate(1000/FPS);
       controls.update();
       renderer.render( scene, camera );
-      capturer.capture( renderer.domElement );
+
+      if ('pending' == capturing) {
+        capturer.capture( renderer.domElement );
+        capturing = 'capturing'
+      }
 
       frame++;
       if (frame < totalFrames) {
         requestAnimationFrame(animate)
       } else {
-        capturer.stop();
-        logg('capturer.stop')
-        capturer.save((blob) => {
-          logg(blob, 'blob')
-          renderer.domElement.toBlob((thumb) => {
-            logg(thumb, 'thumb')
+        if ('capturing' == capturing) {
+          capturer.stop();
+          logg('capturer.stop')
+          capturer.save((blob) => {
+            logg(blob, 'blob')
+            renderer.domElement.toBlob((thumb) => {
+              logg(thumb, 'thumb')
 
-            const form = new FormData();
-            form.append('video', blob, 'lips.webm')
-            form.append('name', '<ccapturejs>')
-            form.append('thumb', thumb)
-            form.append('newspartial_id', newspartial_id)
+              const form = new FormData();
+              form.append('video', blob, 'lips.webm')
+              form.append('name', '<ccapturejs>')
+              form.append('thumb', thumb)
+              form.append('newspartial_id', newspartial_id)
 
-            fetch(wco_origin + '/wco/api/videos/?api_key=' + api_key + '&api_secret=' + api_secret, {
-              method: 'POST',
-              headers: {
-                // 'Content-Type': 'video/webm',
-              },
-              body: form,
+              fetch(wco_origin + '/wco/api/videos/?api_key=' + api_key + '&api_secret=' + api_secret, {
+                method: 'POST',
+                headers: {
+                  // 'Content-Type': 'video/webm',
+                },
+                body: form,
+              })
+
+              capturing = false
             })
-
           })
-        });
+        }
       }
     }
 
 
     // Speak when clicked
     const nodeSpeak = document.getElementById('speak');
-      nodeSpeak.addEventListener('click', function () {
-        try {
+    nodeSpeak.addEventListener('click', async function () {
+      try {
 
-        } catch (error) {
-          console.log(error);
-        }
-      });
+        const url = wco_origin + '/wco/api/newspartials/' + newspartial_id + '/config.json?api_key=' + api_key + '&api_secret=' + api_secret
+        let chunkedInput = await fetch(url).then(r => r.json())
+        const last = chunkedInput.wtimes.length - 1
+        const duration_ms = chunkedInput.wtimes[last] + chunkedInput.wdurations[last]
+        totalFrames = duration_ms / 1000 * FPS;
+        frame = 0;
+        capturing = 'pending';
+
+        capturer.start();
+        logg('capturer.start')
+        head.streamAudio(chunkedInput);
+
+      } catch (error) {
+        console.log(error);
+      }
+    });
 
 
   </script>
