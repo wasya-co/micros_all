@@ -32,6 +32,10 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   end
 end
 
+config.middleware.insert_before 0, Rack::Mime do |mime|
+  Rack::Mime::MIME_TYPES.merge!({ ".mjs" => "application/javascript" })
+end
+
 def json_puts! a, b=''
   puts "+++ #{b}:"
   print JSON.pretty_generate( a )

@@ -1,15 +1,16 @@
 GIT
   remote: https://github.com/wasya-co/iron_warbler.git
-  revision: fd0cec85a0ada6a6e047fe5d2568b965a19518dc
+  revision: ad40365eb3ee173f8744dff4e887ba8c7f6ba0f3
   branch: 2.3.0
   specs:
-    iron_warbler (2.0.7.46)
+    iron_warbler (2.0.7.52)
       business_time
       cancancan (~> 3.5.0)
       devise (~> 4.9.3)
       distribution
       exception_notification (~> 4.5.0)
       haml (~> 6.3.0)
+      holidays
       httparty (~> 0.21.0)
       jbuilder (~> 2.11.0)
       mongoid (~> 7.3.0)
@@ -21,10 +22,10 @@ GIT
 
 GIT
   remote: https://github.com/wasya-co/wco_email_rb.git
-  revision: 017a04615adedfa90e0adf328ed93c1d036e9932
+  revision: 121ae0e1700bbb89b35b0579a0b995905cc89fcf
   branch: 0.0.0
   specs:
-    wco_email (0.1.1.111)
+    wco_email (0.1.1.116)
       aws-sdk-s3
       business_time
       cancancan (~> 3.5.0)
@@ -70,10 +71,10 @@ GIT
 
 GIT
   remote: https://github.com/wasya-co/wco_models.git
-  revision: de4d441220afad0871a4ab311a97e25fa5c67a45
+  revision: 8e8013ddb0b44c543a5b96d323e7d9e06913e068
   branch: 3.3.1
   specs:
-    wco_models (3.1.0.255)
+    wco_models (3.1.0.270)
       ahoy_matey
       aws-sdk-s3
       business_time
@@ -279,6 +280,7 @@ GEM
       thor
       tilt
     hashie (5.0.0)
+    holidays (8.8.0)
     http-accept (1.7.0)
     http-cookie (1.0.7)
       domain_name (~> 0.5)
@@ -353,6 +355,8 @@ GEM
       mongoid
     mongoid_paranoia (0.6.0)
       mongoid (>= 7.3)
+    moonrope-client (1.0.5)
+      json
     multi_json (1.15.0)
     multi_xml (0.6.0)
     net-imap (0.4.17)
@@ -402,6 +406,8 @@ GEM
     os (1.1.4)
     ostruct (0.6.0)
     pdf-core (0.10.0)
+    postal-ruby (1.0.1)
+      moonrope-client (>= 1.0.2, < 1.1)
     pragmatic_segmenter (0.3.24)
     prawn (2.5.0)
       matrix (~> 0.4)
@@ -608,6 +614,7 @@ DEPENDENCIES
   nokogiri (~> 1.15.5)
   omniauth-keycloak (~> 1.5.1)
   omniauth-rails_csrf_protection (~> 1.0.1)
+  postal-ruby (~> 1.0)
   pragmatic_segmenter (= 0.3.24)
   psych (~> 5.0.1)
   puma (~> 5.0)

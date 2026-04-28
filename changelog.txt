@@ -4,5 +4,6 @@ email-0.0.1 ::            :: lighter? removed chromedriver
 
 email-0.0.2 :: 2026-03-27 :: wiring postal in here.
                              what's the other one, 0.1.0 ?
-
-
+email-0.1.0 :: 2026-02-13 :: upgrading to ruby 3.4.2
+                             currently abandoned
+email-0.2.0 :: 2026-04-28 :: continue wiring video renderer for newspartials

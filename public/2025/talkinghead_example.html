@@ -18,7 +18,7 @@
       {
         "three": "/vendor/javascript/threejs/three.module.js",
         "three/addons/": "/vendor/javascript/threejs/jsm/",
-        "talkinghead": "/vendor/javascript/talkinghead.mjs"
+        "talkinghead": "/vendor/javascript/talkinghead.js"
       }
     }
   </script>
@@ -135,7 +135,8 @@
       try {
         nodeLoading.textContent = "Loading...";
         await head.showAvatar( {
-          url: 'https://models.readyplayer.me/64bfa15f0e72c63d7c3934a6.glb?morphTargets=ARKit,Oculus+Visemes,mouthOpen,mouthSmile,eyesClosed,eyesLookUp,eyesLookDown&textureSizeLimit=1024&textureFormat=png',
+          // url: 'https://models.readyplayer.me/64bfa15f0e72c63d7c3934a6.glb?morphTargets=ARKit,Oculus+Visemes,mouthOpen,mouthSmile,eyesClosed,eyesLookUp,eyesLookDown&textureSizeLimit=1024&textureFormat=png',
+          url: '/vendor/models/2026/zhenja/model.glb',
           body: 'F',
           avatarMood: 'neutral',
           lipsyncLang: 'en'
