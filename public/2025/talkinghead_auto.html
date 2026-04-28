@@ -5,49 +5,6 @@
     body {
       background: #efefef;
     }
-    #rotatingC {
-      position: relative;
-    }
-    .camera-axis-helper {
-      position: absolute;
-      right: 12px;
-      bottom: 12px;
-      width: 120px;
-      height: 120px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 8px;
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      backdrop-filter: blur(2px);
-      user-select: none;
-      z-index: 5;
-    }
-    .camera-axis-helper svg {
-      width: 100%;
-      height: 100%;
-    }
-    .camera-axis-line {
-      stroke-width: 6;
-      cursor: grab;
-      stroke-linecap: round;
-      opacity: 0.9;
-      transition: opacity 0.12s linear;
-    }
-    .camera-axis-line:hover {
-      opacity: 1;
-    }
-    .camera-axis-line.dragging {
-      cursor: grabbing;
-      opacity: 1;
-    }
-    .camera-axis-label {
-      fill: #fff;
-      font-size: 13px;
-      font-family: sans-serif;
-      pointer-events: none;
-    }
   </style>
 
   <!-- Import maps polyfill -->
@@ -77,17 +34,6 @@
     height: 480px;
     border: 1px solid red;
     text-align: center; " >
-    <div id="cameraAxisHelper" class="camera-axis-helper" aria-label="Camera axis helper">
-      <svg viewBox="0 0 120 120">
-        <line id="axisX" class="camera-axis-line" x1="60" y1="60" x2="106" y2="60" stroke="#ff4d4d"></line>
-        <line id="axisY" class="camera-axis-line" x1="60" y1="60" x2="60" y2="14" stroke="#4dff88"></line>
-        <line id="axisZ" class="camera-axis-line" x1="60" y1="60" x2="26" y2="94" stroke="#4da6ff"></line>
-        <text class="camera-axis-label" x="109" y="64">X</text>
-        <text class="camera-axis-label" x="62" y="13">Y</text>
-        <text class="camera-axis-label" x="15" y="102">Z</text>
-        <circle cx="60" cy="60" r="4" fill="#ffffff"></circle>
-      </svg>
-    </div>
   </div>
 
   <script type="module">
@@ -131,7 +77,6 @@
 
     let camera, controls, head, renderer, scene;
     var capturer = new CCapture( { format: 'webm', framerate: FPS } );
-    let activeAxisDrag = null;
 
     async function init() {
       const url = wco_origin + '/wco/api/newspartials/' + newspartial_id + '/config.json?api_key=' + api_key + '&api_secret=' + api_secret
@@ -146,6 +91,8 @@
       // const container = document.createElement( 'div' )
       const loader = new GLTFLoader().setPath( '/vendor/models' )
       scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xd3d3d3); // light gray
+
 
       /* fov — Camera frustum vertical field of view.
        * aspect — Camera frustum aspect ratio.
@@ -190,8 +137,7 @@
       try {
         nodeLoading.textContent = "Loading...";
         await head.showAvatar( {
-          // url: 'https://models.readyplayer.me/64bfa15f0e72c63d7c3934a6.glb?morphTargets=ARKit,Oculus+Visemes,mouthOpen,mouthSmile,eyesClosed,eyesLookUp,eyesLookDown&textureSizeLimit=1024&textureFormat=png',
-          url: '/vendor/models/2026/zhenja/model.glb',
+          url: '/vendor/models/2026/julia.glb',
           body: 'F',
           avatarMood: 'neutral',
           lipsyncLang: 'en'
@@ -249,7 +195,6 @@
       controls.maxDistance = 100;
       controls.autoRotate = false;
       controls.update();
-      initCameraAxisHelper();
 
       //
 
@@ -277,59 +222,6 @@
 
     function render() {
       renderer.render( scene, camera );
-    }
-
-    function initCameraAxisHelper() {
-      const helperNode = document.getElementById('cameraAxisHelper');
-      if (!helperNode) return;
-
-      const axisMap = {
-        axisX: 'x',
-        axisY: 'y',
-        axisZ: 'z',
-      };
-
-      const onPointerMove = (event) => {
-        if (!activeAxisDrag) return;
-        event.preventDefault();
-
-        const deltaX = event.clientX - activeAxisDrag.startX;
-        const deltaY = event.clientY - activeAxisDrag.startY;
-        const dragAmount = deltaX - deltaY;
-        const movementScale = 0.003;
-        const axisMovement = dragAmount * movementScale;
-
-        camera.position[activeAxisDrag.axis] = activeAxisDrag.startValue + axisMovement;
-        controls.update();
-      };
-
-      const onPointerUp = () => {
-        if (!activeAxisDrag) return;
-        activeAxisDrag.element.classList.remove('dragging');
-        activeAxisDrag = null;
-        window.removeEventListener('pointermove', onPointerMove);
-        window.removeEventListener('pointerup', onPointerUp);
-      };
-
-      Object.entries(axisMap).forEach(([id, axis]) => {
-        const element = document.getElementById(id);
-        if (!element) return;
-
-        element.addEventListener('pointerdown', (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          activeAxisDrag = {
-            axis,
-            startX: event.clientX,
-            startY: event.clientY,
-            startValue: camera.position[axis],
-            element,
-          };
-          element.classList.add('dragging');
-          window.addEventListener('pointermove', onPointerMove);
-          window.addEventListener('pointerup', onPointerUp);
-        });
-      });
     }
 
     function animate() {
