@@ -60,6 +60,9 @@
     <button data-axis="x" data-delta="-10">-x</button>
     <button data-axis="z" data-delta="10">+z</button>
     <button data-axis="z" data-delta="-10">-z</button>
+    <button data-action="switch-camera">s</button>
+    <button data-action="copy-camera">cp</button>
+    <button data-action="toggle-camera-helpers">toggle camera helpers</button>
   </div>
   <div id="rotatingC" class="r2" style="width: 640px;
     height: 480px;
@@ -87,8 +90,9 @@
 
     const params = new URLSearchParams(window.location.search);
 
-    const w = 1024;
-    const h = 576;
+    const w = params.get('w_px');
+    const h = params.get('h_px');
+
     let config = {
         sampleRate: 8000,
         mood: 'neutral',
@@ -106,7 +110,7 @@
     const newspartial_id = params.get('newspartial_id')
     let totalFrames = Number.POSITIVE_INFINITY
 
-    let camera, capturing, controls, head, renderer, scene;
+    let camera, cameraA, cameraB, cameraAHelper, cameraBHelper, originAxesHelper, cameraHelpersVisible, capturing, controls, head, renderer, scene;
     var capturer = new CCapture( { format: 'webm', framerate: FPS } );
     const CAMERA_STEP = 0.05;
 
@@ -114,6 +118,18 @@
       const helperButtons = document.querySelectorAll('.camera-helper button');
       helperButtons.forEach((button) => {
         button.addEventListener('click', () => {
+          if (button.dataset.action === 'switch-camera') {
+            switchCamera();
+            return;
+          }
+          if (button.dataset.action === 'toggle-camera-helpers') {
+            toggleCameraHelpers();
+            return;
+          }
+          if (button.dataset.action === 'copy-camera') {
+            logCurrentCameraTransform();
+            return;
+          }
           const axis = button.dataset.axis;
           const direction = Number(button.dataset.delta);
           camera.position[axis] += direction * CAMERA_STEP;
@@ -122,12 +138,45 @@
       });
     }
 
+    function switchCamera() {
+      camera = camera === cameraA ? cameraB : cameraA;
+      controls.object = camera;
+      controls.update();
+      if (head) {
+        head.avatarOnlyCamera = camera;
+      }
+    }
+
+    function setupCameraVisualAids() {
+      cameraAHelper = new THREE.CameraHelper(cameraA);
+      cameraBHelper = new THREE.CameraHelper(cameraB);
+      cameraHelpersVisible = true;
+      cameraAHelper.visible = cameraHelpersVisible;
+      cameraBHelper.visible = cameraHelpersVisible;
+      scene.add(cameraAHelper);
+      scene.add(cameraBHelper);
+    }
+
+    function toggleCameraHelpers() {
+      cameraHelpersVisible = !cameraHelpersVisible;
+      cameraAHelper.visible = cameraHelpersVisible;
+      cameraBHelper.visible = cameraHelpersVisible;
+    }
+
+    function logCurrentCameraTransform() {
+      const currentCameraName = camera === cameraA ? 'cameraA' : 'cameraB';
+      console.log(`[${currentCameraName}] position:`, camera.position.toArray() );
+      console.log(`[${currentCameraName}] rotation:`, camera.rotation.toArray());
+    }
+
 
     async function init() {
       // const container = document.createElement( 'div' )
       const loader = new GLTFLoader().setPath( '/vendor/models' )
       scene = new THREE.Scene();
-      scene.background = new THREE.Color(0xd3d3d3); // light gray
+      scene.background = new THREE.Color(0x666666);
+      originAxesHelper = new THREE.AxesHelper(1.5);
+      scene.add(originAxesHelper);
 
 
       /* fov — Camera frustum vertical field of view.
@@ -135,9 +184,16 @@
        * near — Camera frustum near plane.
        * far — Camera frustum far plane.
       **/
-      camera = new THREE.PerspectiveCamera( 10, w/h, 0.001, 1000 )
-      camera.position.set( 1.86, 1.44, 1.00 )
-      camera.rotation.set( -.06, 0.73, 0.04 )
+      cameraA = new THREE.PerspectiveCamera( 10, w/h, 0.001, 1000 )
+      cameraA.position.fromArray([ 3.0512117263943934, 0.7239926700381756, 1.586727856157778 ])
+      cameraA.quaternion.set( -0.4280643400582541, 1.0515152293687262, 0.37716718081874623, 'XYZ' )
+
+      cameraB = new THREE.PerspectiveCamera( 10, w/h, 0.001, 1000 )
+      cameraB.position.set( 0.75, 1.15, 2.10 )
+      cameraB.rotation.set( -0.03, 0.25, 0.01 )
+
+      camera = cameraA;
+      setupCameraVisualAids();
 
       const ambientLight = new THREE.AmbientLight( 0xffffff );
       scene.add( ambientLight );
@@ -244,8 +300,12 @@
     })
 
     function onWindowResize() {
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
+      cameraA.aspect = w / h;
+      cameraA.updateProjectionMatrix();
+      cameraB.aspect = w / h;
+      cameraB.updateProjectionMatrix();
+      cameraAHelper.update();
+      cameraBHelper.update();
       renderer.setSize( w, h );
       render();
     }

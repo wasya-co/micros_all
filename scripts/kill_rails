@@ -1,13 +1,27 @@
 #!/bin/bash
 
-set -e # error
-# set -x # verbose
+PORT=3002
 
-pid=`lsof -i:$PORT|grep ruby|tr -s ' ' | cut -f 2 -d\ |head -n1`
-if [ -z "$pid" ]
-then
-  echo 'The server was not running.'
-else
-  sudo kill -9 $pid
+PID=$(lsof -ti tcp:$PORT)
+
+if [ -z "$PID" ]; then
+  echo "No process found on port $PORT"
+  exit 0
 fi
+
+echo "Stopping process $PID on port $PORT"
+
+# try graceful shutdown first
+kill $PID
+
+# wait a moment
+sleep 2
+
+# force kill if still running
+if lsof -ti tcp:$PORT > /dev/null; then
+  echo "Force killing process $PID"
+  kill -9 $PID
+fi
+
+echo "Done"
 

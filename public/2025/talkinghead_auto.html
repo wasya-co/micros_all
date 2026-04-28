@@ -30,8 +30,8 @@
   <button id='speak'>Speak</button>
   <div id='avatar'></div>
   <div id='loading'>Loading...</div>
-  <div id="rotatingC" class="r2" style="width: 640px;
-    height: 480px;
+  <div id="rotatingC" class="r2" style="width: 200px;
+    height: 200px;
     border: 1px solid red;
     text-align: center; " >
   </div>
@@ -56,8 +56,9 @@
 
     const params = new URLSearchParams(window.location.search);
 
-    const w = 1024;
-    const h = 576;
+    const w = params.get('w_px');
+    const h = params.get('h_px');
+
     let config = {
         sampleRate: 8000,
         mood: 'neutral',
@@ -99,9 +100,12 @@
        * near — Camera frustum near plane.
        * far — Camera frustum far plane.
       **/
-      camera = new THREE.PerspectiveCamera( 10, w/h, 0.1, 10 )
-      camera.position.set( 1.86, 1.44, 1.00 )
-      camera.rotation.set( -.06, 0.73, 0.04 )
+      camera = new THREE.PerspectiveCamera( 10, w/h, 0.01, 100 )
+      camera.position.fromArray([ 3.0512117263943934, 0.7239926700381756, 1.586727856157778 ])
+      camera.quaternion.set( -0.4280643400582541, 1.0515152293687262, 0.37716718081874623, 'XYZ' )
+
+      // 4.049703418500145, 0.5451708430423388, 1.6674013473244271
+      // -0.31600216572394507, 1.1620150144851518, 0.2914741756274, 'XYZ'
 
       const ambientLight = new THREE.AmbientLight( 0xffffff );
       scene.add( ambientLight );

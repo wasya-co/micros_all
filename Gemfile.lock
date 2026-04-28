@@ -71,7 +71,7 @@ GIT
 
 GIT
   remote: https://github.com/wasya-co/wco_models.git
-  revision: 8e8013ddb0b44c543a5b96d323e7d9e06913e068
+  revision: ae671e10bf093036a0f507bff72b83675b7e0e0f
   branch: 3.3.1
   specs:
     wco_models (3.1.0.270)
@@ -99,6 +99,7 @@ GIT
       sass-rails (~> 6.0)
       selenium-webdriver (~> 4.9.0)
       sidekiq (~> 7.2.0)
+      streamio-ffmpeg
       stripe (~> 10.4.0)
 
 GEM
@@ -546,6 +547,8 @@ GEM
       net-sftp (>= 2.1.2)
       net-ssh (>= 2.8.0)
       ostruct
+    streamio-ffmpeg (3.0.2)
+      multi_json (~> 1.8)
     stringio (3.1.2)
     stripe (10.4.0)
     temple (0.10.3)
