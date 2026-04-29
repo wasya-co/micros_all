@@ -77,18 +77,36 @@
     let totalFrames
 
     let camera, controls, head, renderer, scene;
+    let captureStarted = false;
+    let captureFinished = false;
     var capturer = new CCapture( { format: 'webm', framerate: FPS } );
 
-    async function init() {
+    function waitForRenderFrames(frameCount = 1) {
+      return new Promise((resolve) => {
+        const step = () => {
+          if (frameCount <= 0) {
+            resolve();
+            return;
+          }
+          frameCount -= 1;
+          requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      });
+    }
+
+    async function loadChunkedInput() {
       const url = wco_origin + '/wco/api/newspartials/' + newspartial_id + '/config.json?api_key=' + api_key + '&api_secret=' + api_secret
       let chunkedInput = await fetch(url).then(r => r.json())
       logg(chunkedInput, 'chunkedInput')
-      const last = chunkedInput.wtimes.length-1
+      const last = chunkedInput.wtimes.length - 1
       const duration_ms = chunkedInput.wtimes[last] + chunkedInput.wdurations[last]
       logg(duration_ms, 'duration_ms')
-      totalFrames = duration_ms/1000*FPS;
+      totalFrames = duration_ms / 1000 * FPS;
+      return chunkedInput;
+    }
 
-
+    async function init() {
       // const container = document.createElement( 'div' )
       const loader = new GLTFLoader().setPath( '/vendor/models' )
       scene = new THREE.Scene();
@@ -109,6 +127,29 @@
 
       const ambientLight = new THREE.AmbientLight( 0xffffff );
       scene.add( ambientLight );
+
+      renderer = new THREE.WebGLRenderer( {
+        alpha: false,
+        antialias: true,
+      } );
+      renderer.setPixelRatio( window.devicePixelRatio );
+      renderer.setSize( w, h );
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1;
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      document.getElementById('rotatingC').appendChild( renderer.domElement );
+
+      controls = new OrbitControls( camera, renderer.domElement );
+      controls.enableDamping = true;
+      controls.minDistance = 0.5;
+      controls.maxDistance = 100;
+      controls.autoRotate = false;
+      controls.update();
+
+      window.addEventListener( 'resize', onWindowResize );
+
+      // Start render loop immediately so the scene appears with zero extra delay.
+      animate()
 
       // const pointLight = new THREE.PointLight( 0xffffff, 15 );
       // camera.add( pointLight );
@@ -151,7 +192,6 @@
             nodeLoading.textContent = "Loading " + val + "%";
           }
         });
-        nodeLoading.style.display = 'none';
 
         head.armature.position.set(0,-3,0);
         head.armature.rotation.set(0,1,0);
@@ -167,46 +207,21 @@
               // Configure metrics: enabled/disabled and reporting rate
               metrics: config.enableMetrics ? { enabled: true, intervalHz: config.metricsInterval } : { enabled: false }
             })
-
-        capturer.start();
-        logg('capturer.start')
-        head.streamAudio(chunkedInput);
+        nodeLoading.style.display = 'none';
+        console.log('now.')
 
       } catch (error) {
         console.log(error);
         nodeLoading.textContent = error.toString();
       }
-
-
-      //
-
-      renderer = new THREE.WebGLRenderer( {
-        alpha: false,
-        antialias: true,
-      } );
-      renderer.setPixelRatio( window.devicePixelRatio );
-      renderer.setSize( w, h );
-      renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1;
-      renderer.outputEncoding = THREE.sRGBEncoding;
-      document.getElementById('rotatingC').appendChild( renderer.domElement );
-
-      //
-
-      controls = new OrbitControls( camera, renderer.domElement );
-      controls.enableDamping = true;
-      controls.minDistance = 0.5;
-      controls.maxDistance = 100;
-      controls.autoRotate = false;
-      controls.update();
-
-      //
-
-      window.addEventListener( 'resize', onWindowResize );
-
-
-      // renderer.setAnimationLoop(animate);
-      animate()
+      // Ensure assets are loaded and scene is rendering before capture begins.
+      await waitForRenderFrames(2);
+      const chunkedInput = await loadChunkedInput();
+      frame = 0;
+      captureStarted = true;
+      capturer.start();
+      logg('capturer.start')
+      head.streamAudio(chunkedInput);
     }
 
     let semafore = false
@@ -230,15 +245,19 @@
 
     function animate() {
       const t = frame / FPS;
-      head.animate(1000/FPS);
+      if (head) {
+        head.animate(1000/FPS);
+      }
       controls.update();
       renderer.render( scene, camera );
-      capturer.capture( renderer.domElement );
 
-      frame++;
-      if (frame < totalFrames) {
-        requestAnimationFrame(animate)
-      } else {
+      if (captureStarted && !captureFinished) {
+        capturer.capture( renderer.domElement );
+        frame++;
+      }
+
+      if (captureStarted && frame >= totalFrames) {
+        captureFinished = true;
         capturer.stop();
         logg('capturer.stop')
         capturer.save((blob) => {
@@ -262,7 +281,9 @@
 
           })
         });
+        return;
       }
+      requestAnimationFrame(animate)
     }
 
 
