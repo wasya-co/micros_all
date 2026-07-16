@@ -4,7 +4,7 @@ export IMAP_USER = '<a@b.c>'
 export IMAP_PASSWD = ''
 
 ## for cancan
-EMAIL
+export EMAIL='victor@piousbox.com'
 
 WCO_API_KEY
 WCO_API_SECRET

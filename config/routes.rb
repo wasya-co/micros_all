@@ -27,12 +27,9 @@ Rails.application.routes.draw do
   end
   mount Wco::Engine        => '/wco'
 
-  post '/api/email/messages/from-ses', to: 'wco_email/api#create_email_message'
-  get  '/api/obf/:id',                 to: 'wco/api/obfuscated_redirects#show', as: :obf
-
   devise_for :users, controllers: {
     omniauth_callbacks: 'users/omniauth_callbacks',
-  }
+  };
   resources :users
 
 end
