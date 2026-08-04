@@ -8,6 +8,7 @@ access
 /config/master.key
 /config/initializers/0*
 !/config/initializers/0*-example
+/config/ssl
 
 /db/*.sqlite3
 /db/*.sqlite3-*
