@@ -1,0 +1,52 @@
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css">
+<!--[if (lt IE 9)]><script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/min/tiny-slider.helper.ie8.js"></script><![endif]-->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js"></script>
+<!-- NOTE: prior to v2.2.1 tiny-slider.js need to be in <body> -->
+
+<style>
+
+.my-slider div {
+  border: 1px solid red;
+  height: 200px;
+  background: #cecece;
+  margin: 0.5em;
+  width: 500px;
+  color: white;
+  padding: 1em;
+}
+
+</style>
+</head>
+<body>
+
+  <div class="my-slider">
+    <div>One</div>
+    <div>Two</div>
+    <div>Three</div>
+    <div>Four</div>
+    <div>Five</div>
+  </div>
+
+<script type="module">
+  var slider = tns({
+    center: true,
+    container: '.my-slider',
+    items: 2.1,
+    loop: true,
+    // slideBy: 'page',
+    autoplay: true
+  });
+  </script>
+
+</body>
+</html>
