@@ -81,7 +81,7 @@
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const API_KEY = params.get('pexels_api_key');
+    const API_KEY = params.get('PEXELS_API_KEY');
 
     const form = document.getElementById('search-form');
     const results = document.getElementById('results');
@@ -128,7 +128,7 @@
         >
           <input type="hidden" name="image_url" value="${photo.src.landscape}">
           <img class='photo-frame' src="${photo.src.landscape}" alt="${photo.alt || ''}">
-          <button type="submit" class="photo-frame-button">Generate</button>
+          <button type="submit" class="photo-frame-button">Generate Stable Diffusion Illustration</button>
         </form>
         `;
 
