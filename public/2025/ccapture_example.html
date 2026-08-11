@@ -13,7 +13,6 @@
   <script type="importmap">
   { "imports":
     {
-      "ccapture": "https://cdn.jsdelivr.net/npm/ccapture.js@2/build/ccapture.umd.min.js",
       "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js/+esm",
       "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
       "talkinghead": "https://cdn.jsdelivr.net/gh/met4citizen/TalkingHead@1.7/modules/talkinghead.mjs"
@@ -99,9 +98,9 @@ async function speak() {
 
 
 
-  const capturer = new CCapture({
+  let capturer = new CCapture({
     format: 'webm',
-    framerate: fps
+    framerate: fps,
   })
   let frame = 0
 
@@ -127,6 +126,8 @@ async function speak() {
 
     capturer.capture(canvas)
     frame++
+
+    logg(frame, 'frame')
 
     if (frame < totalFrames) {
       requestAnimationFrame(animate)
