@@ -7,6 +7,8 @@ See the docs/ folder.
 
   python3 -m venv zenv
 
+  caddy run --config Caddyfile
+
 == Install ==
 
 === localstack ===
