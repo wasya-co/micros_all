@@ -23,11 +23,17 @@
 
 </head>
 <body>
-  <h1>Hello</h1>
+  <!-- <h1>Hello</h1> -->
 
   <button onclick="speak()">Speak</button>
   <button id="start">Record</button>
   <br />
+  <audio controls id='speech'>
+    <source src="speech.wav" type="audio/wav">
+    Your browser does not support the audio element.
+  </audio>
+  <br />
+  <canvas id="canvas" width="854" height="460"></canvas>
 
 <script>
 /* logg
@@ -58,7 +64,7 @@ function loadVoices() {
 }
 
 async function speak() {
-  const text = "Hello, this is text to speech in HTML."
+  const text = "The yankee military has effectively run out of high precision, land based tactical missiles due to its campaign against Iran."
   const utterance = new SpeechSynthesisUtterance(text)
 
 
@@ -85,9 +91,7 @@ async function speak() {
   // })
 
 }
-</script>
-<canvas id="canvas" width="854" height="460"></canvas>
-<script>
+
   const canvas = document.getElementById('canvas')
   const ctx = canvas.getContext('2d')
   const fps = 30
@@ -134,6 +138,8 @@ async function speak() {
     }
   }
 
+  const speech = document.getElementById('speech')
+
   const doCapture = () => {
     if (animating) return
     animating = true
@@ -146,12 +152,13 @@ async function speak() {
     window._rafNative = window.requestAnimationFrame.bind(window)
     window._timeoutNative = window.setTimeout.bind(window)
 
+
     capturer = new CCapture({
       format: 'webm',
       framerate: fps,
+      media: speech,
     })
     capturer.start()
-    speak()
 
     // Restore native timers so the canvas animates in real time
     window.requestAnimationFrame = window._rafNative
