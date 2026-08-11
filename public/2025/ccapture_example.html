@@ -2,13 +2,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page Title</title>
+  <title>Ccapture Example</title>
   <meta name="description" content="Page description">
   <meta name="keywords" content="keyword1, keyword2">
   <!-- <link rel="stylesheet" href="styles.css"> -->
   <!-- <link rel="icon" href="/favicon.ico"> -->
 
-  <!-- <script src="https://cdn.jsdelivr.net/npm/ccapture.js@2/build/ccapture.umd.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/ccapture.js@2/build/ccapture.umd.min.js"></script>
 
   <script type="importmap">
   { "imports":
@@ -27,6 +27,8 @@
   <h1>Hello</h1>
 
   <button onclick="speak()">Speak</button>
+  <button id="start">Record</button>
+  <br />
 
 <script>
 /* logg
@@ -67,19 +69,82 @@ async function speak() {
   voices = voices.filter(voice =>
     voice.lang.startsWith('en')
   )
-  logg(voices, 'voices')
-  const voice = voices.find(v => v.name === 'Bubbles')
+  // logg(voices.map(v => v.name), 'voices')
+  const voice = voices[0] // .find(v => v.name === 'Cellos')
 
   utterance.rate = 1
   utterance.pitch = 1
   utterance.volume = 1
   utterance.voice = voice
-
   speechSynthesis.speak(utterance)
+
+  // voices.map(async (voice) => {
+  //   utterance.voice = voice
+
+  //   await speechSynthesis.speak(utterance)
+  //   logg(voice, 'voice')
+  // })
 
 }
 </script>
+<canvas id="canvas" width="854" height="460"></canvas>
+<script>
+  const canvas = document.getElementById('canvas')
+  const ctx = canvas.getContext('2d')
+  const fps = 30
+  const duration = 3
+  const totalFrames = fps * duration
 
+
+
+
+
+  const capturer = new CCapture({
+    format: 'webm',
+    framerate: fps
+  })
+  let frame = 0
+
+  /*
+   * green to yellow
+  **/
+  let direction = 1
+  const speed = 0.01
+  let progress = 0
+  function animate() {
+    progress += speed * direction
+
+    if (progress >= 1 || progress <= 0) {
+      direction *= -1
+    }
+
+    const red = Math.round(255 * progress)
+    const green = 255
+    const blue = 0
+
+    ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    capturer.capture(canvas)
+    frame++
+
+    if (frame < totalFrames) {
+      requestAnimationFrame(animate)
+    } else {
+      capturer.stop()
+      capturer.save()
+    }
+  }
+
+  const doCapture = () => {
+    capturer.start()
+    animate()
+  }
+
+  document.getElementById('start').addEventListener('click', doCapture)
+
+
+</script>
 
 <!-- <script type='module' >
 
