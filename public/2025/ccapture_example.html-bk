@@ -25,6 +25,7 @@
 <body>
   <!-- <h1>Hello</h1> -->
 
+  <button onclick="speak()">Speak</button>
   <button id="start">Record</button>
   <br />
   <audio controls id='speech'>
@@ -47,9 +48,51 @@ const logg = (a, b="", c=null) => {
   console.log(`+++ ${b}:`, a); // eslint-disable-line no-console
 };
 
+function loadVoices() {
+  return new Promise(resolve => {
+    const voices = speechSynthesis.getVoices()
+
+    if (voices.length > 0) {
+      resolve(voices)
+      return
+    }
+
+    speechSynthesis.addEventListener('voiceschanged', () => {
+      resolve(speechSynthesis.getVoices())
+    }, { once: true })
+  })
+}
+
+async function speak() {
+  const text = "The yankee military has effectively run out of high precision, land based tactical missiles due to its campaign against Iran."
+  const utterance = new SpeechSynthesisUtterance(text)
+
+
+
+
+  let voices = await loadVoices()
+  voices = voices.filter(voice =>
+    voice.lang.startsWith('en')
+  )
+  // logg(voices.map(v => v.name), 'voices')
+  const voice = voices[0] // .find(v => v.name === 'Cellos')
+
+  utterance.rate = 1
+  utterance.pitch = 1
+  utterance.volume = 1
+  utterance.voice = voice
+  speechSynthesis.speak(utterance)
+
+  // voices.map(async (voice) => {
+  //   utterance.voice = voice
+
+  //   await speechSynthesis.speak(utterance)
+  //   logg(voice, 'voice')
+  // })
+
+}
 
   const canvas = document.getElementById('canvas')
-  const speech = document.getElementById('speech')
   const ctx = canvas.getContext('2d')
   const fps = 30
   const duration = 3
@@ -95,7 +138,7 @@ const logg = (a, b="", c=null) => {
     }
   }
 
-
+  const speech = document.getElementById('speech')
 
   const doCapture = () => {
     if (animating) return
@@ -131,5 +174,20 @@ const logg = (a, b="", c=null) => {
   document.getElementById('start').addEventListener('click', doCapture)
 </script>
 
+<!-- <script type='module' >
+
+  import CCapture from "ccapture";
+
+  const capturer = new CCapture({ format: "mp4", framerate: 60, timeLimit: 5 });
+  capturer.start();
+
+  function render() {
+    requestAnimationFrame(render);      // your normal loop
+    drawMyScene();                      // draws using performance.now() / rAF time
+    capturer.capture(canvas);           // ← the only line you add
+  }
+  render();
+
+</script> -->
 
 </body></html>
