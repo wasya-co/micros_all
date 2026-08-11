@@ -8,7 +8,7 @@
   <!-- <link rel="stylesheet" href="styles.css"> -->
   <!-- <link rel="icon" href="/favicon.ico"> -->
 
-  <script src="https://cdn.jsdelivr.net/npm/ccapture.js@2/build/ccapture.umd.min.js"></script>
+  <script src="/vendor/javascript/CCapture.all.min.js"></script>
 
   <script type="importmap">
   { "imports":
@@ -94,15 +94,9 @@ async function speak() {
   const duration = 3
   const totalFrames = fps * duration
 
-
-
-
-
-  let capturer = new CCapture({
-    format: 'webm',
-    framerate: fps,
-  })
+  let capturer = null
   let frame = 0
+  let animating = false
 
   /*
    * green to yellow
@@ -110,41 +104,67 @@ async function speak() {
   let direction = 1
   const speed = 0.01
   let progress = 0
-  function animate() {
+
+  function draw() {
     progress += speed * direction
 
     if (progress >= 1 || progress <= 0) {
       direction *= -1
+      progress = Math.max(0, Math.min(1, progress))
     }
 
     const red = Math.round(255 * progress)
-    const green = 255
-    const blue = 0
-
-    ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`
+    ctx.fillStyle = `rgb(${red}, 255, 0)`
     ctx.fillRect(0, 0, canvas.width, canvas.height)
+  }
 
+  function animate() {
+    draw()
     capturer.capture(canvas)
     frame++
-
-    logg(frame, 'frame')
+    // logg(frame, 'frame')
 
     if (frame < totalFrames) {
-      requestAnimationFrame(animate)
+      // Native timer (saved before capturer.start) so playback is visible at fps
+      window._timeoutNative(animate, 1000 / fps)
     } else {
+      animating = false
       capturer.stop()
       capturer.save()
     }
   }
 
   const doCapture = () => {
+    if (animating) return
+    animating = true
+
+    frame = 0
+    progress = 0
+    direction = 1
+
+    // Save real timers before CCapture hooks them
+    window._rafNative = window.requestAnimationFrame.bind(window)
+    window._timeoutNative = window.setTimeout.bind(window)
+
+    capturer = new CCapture({
+      format: 'webm',
+      framerate: fps,
+    })
     capturer.start()
+    speak()
+
+    // Restore native timers so the canvas animates in real time
+    window.requestAnimationFrame = window._rafNative
+    window.setTimeout = window._timeoutNative
+
     animate()
   }
 
+  // initial frame so the canvas isn't blank
+  ctx.fillStyle = 'rgb(0, 255, 0)'
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+
   document.getElementById('start').addEventListener('click', doCapture)
-
-
 </script>
 
 <!-- <script type='module' >
