@@ -7,11 +7,13 @@
   <meta name="keywords" content="keyword1, keyword2">
 
   <!-- <script src="/vendor/javascript/CCapture.all.min.js"></script> -->
-  <script src="https://cdn.jsdelivr.net/npm/ccapture.js@2/build/ccapture.umd.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/ccapture.js@2/build/ccapture.umd.min.js"></script> -->
 
   <script type="importmap">
   { "imports":
     {
+      "ccapture.js": "https://cdn.jsdelivr.net/npm/ccapture.js@2.0.0/src/index.js",
+      "ccapture.js/": "https://cdn.jsdelivr.net/npm/ccapture.js@2.0.0/src/",
       "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js/+esm",
       "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
       "talkinghead": "https://cdn.jsdelivr.net/gh/met4citizen/TalkingHead@1.7/modules/talkinghead.mjs"
@@ -46,7 +48,7 @@ const logg = (a, b="", c=null) => {
   console.log(`+++ ${b}:`, a); // eslint-disable-line no-console
 };
 
-  // import { CCapture, renderAudioFrames } from "ccapture.js";
+  import { CCapture, renderAudioFrames } from "ccapture.js";
 
   const canvas = document.getElementById('canvas')
   const speech = document.getElementById('speech')

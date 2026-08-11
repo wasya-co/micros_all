@@ -1,0 +1,104 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ccapture Example</title>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "ccapture.js": "https://cdn.jsdelivr.net/npm/ccapture.js@2.0.0/src/index.js",
+      "ccapture.js/": "https://cdn.jsdelivr.net/npm/ccapture.js@2.0.0/src/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <button id="start">Record</button>
+  <br />
+  <audio controls id="speech">
+    <source src="speech.wav" type="audio/wav">
+    Your browser does not support the audio element.
+  </audio>
+  <br />
+  <canvas id="canvas" width="854" height="460"></canvas>
+
+<script type="module">
+/* logg
+**/
+const logg = (a, b = "", c = null) => {
+  if (typeof window === "undefined") return
+  c = typeof c === "string" ? c : b.replace(/\W/g, "")
+  if (c.length > 0) window[c] = a
+  console.log(`+++ ${b}:`, a)
+}
+
+import { CCapture, renderAudioFrames } from "ccapture.js"
+
+const canvas = document.getElementById("canvas")
+const speech = document.getElementById("speech")
+const ctx = canvas.getContext("2d")
+const fps = 30
+
+let animating = false
+let direction = 1
+const speed = 0.01
+let progress = 0
+
+function draw() {
+  progress += speed * direction
+  if (progress >= 1 || progress <= 0) {
+    direction *= -1
+    progress = Math.max(0, Math.min(1, progress))
+  }
+  const red = Math.round(255 * progress)
+  ctx.fillStyle = `rgb(${red}, 255, 0)`
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+}
+
+const doCapture = async () => {
+  if (animating) return
+  animating = true
+  progress = 0
+  direction = 1
+
+  // Decode speech.wav once — used for muxed audio track (+ optional FFT frames)
+  const arrayBuffer = await (await fetch("speech.wav")).arrayBuffer()
+  const buffer = await new OfflineAudioContext(1, 1, 44100).decodeAudioData(arrayBuffer)
+  const frames = Math.max(1, Math.ceil(buffer.duration * fps))
+
+  // Optional: per-frame FFT/waveform for audio-reactive drawing
+  // (not required to mux audio — that's the `audio: buffer` option below)
+  const audioFrames = await renderAudioFrames({
+    buffer,
+    framerate: fps,
+    frames,
+    fftSize: 1024,
+  })
+  logg(audioFrames.length, "audioFrames")
+
+  const capturer = new CCapture({
+    format: "webm",
+    framerate: fps,
+    frameLimit: frames,
+    audio: buffer,   // mux speech.wav into the webm
+    media: speech,   // frame-step the <audio> in lockstep
+    name: "recording",
+  })
+
+  // Headless capture loop — draws + encodes until frameLimit, then saves
+  await capturer.record(canvas, (i) => {
+    draw()
+    // audioFrames[i] has { frequency, waveform } if you want reactive visuals
+  })
+
+  animating = false
+}
+
+ctx.fillStyle = "rgb(0, 255, 0)"
+ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+document.getElementById("start").addEventListener("click", doCapture)
+</script>
+
+</body></html>
