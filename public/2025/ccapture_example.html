@@ -1,0 +1,100 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Title</title>
+  <meta name="description" content="Page description">
+  <meta name="keywords" content="keyword1, keyword2">
+  <!-- <link rel="stylesheet" href="styles.css"> -->
+  <!-- <link rel="icon" href="/favicon.ico"> -->
+
+  <!-- <script src="https://cdn.jsdelivr.net/npm/ccapture.js@2/build/ccapture.umd.min.js"></script> -->
+
+  <script type="importmap">
+  { "imports":
+    {
+      "ccapture": "https://cdn.jsdelivr.net/npm/ccapture.js@2/build/ccapture.umd.min.js",
+      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js/+esm",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+      "talkinghead": "https://cdn.jsdelivr.net/gh/met4citizen/TalkingHead@1.7/modules/talkinghead.mjs"
+    }
+  }
+  </script>
+
+
+</head>
+<body>
+  <h1>Hello</h1>
+
+  <button onclick="speak()">Speak</button>
+
+<script>
+/* logg
+**/
+const logg = (a, b="", c=null) => {
+  if ('undefined' === typeof window) { return }
+
+  c = "string" === typeof c ? c : b.replace(/\W/g, "");
+  if (c.length > 0) {
+    window[c] = a;
+  }
+  console.log(`+++ ${b}:`, a); // eslint-disable-line no-console
+};
+
+function loadVoices() {
+  return new Promise(resolve => {
+    const voices = speechSynthesis.getVoices()
+
+    if (voices.length > 0) {
+      resolve(voices)
+      return
+    }
+
+    speechSynthesis.addEventListener('voiceschanged', () => {
+      resolve(speechSynthesis.getVoices())
+    }, { once: true })
+  })
+}
+
+async function speak() {
+  const text = "Hello, this is text to speech in HTML."
+  const utterance = new SpeechSynthesisUtterance(text)
+
+
+
+
+  let voices = await loadVoices()
+  voices = voices.filter(voice =>
+    voice.lang.startsWith('en')
+  )
+  logg(voices, 'voices')
+  const voice = voices.find(v => v.name === 'Bubbles')
+
+  utterance.rate = 1
+  utterance.pitch = 1
+  utterance.volume = 1
+  utterance.voice = voice
+
+  speechSynthesis.speak(utterance)
+
+}
+</script>
+
+
+<!-- <script type='module' >
+
+  import CCapture from "ccapture";
+
+  const capturer = new CCapture({ format: "mp4", framerate: 60, timeLimit: 5 });
+  capturer.start();
+
+  function render() {
+    requestAnimationFrame(render);      // your normal loop
+    drawMyScene();                      // draws using performance.now() / rAF time
+    capturer.capture(canvas);           // ← the only line you add
+  }
+  render();
+
+</script> -->
+
+</body></html>
