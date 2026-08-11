@@ -5,10 +5,9 @@
   <title>Ccapture Example</title>
   <meta name="description" content="Page description">
   <meta name="keywords" content="keyword1, keyword2">
-  <!-- <link rel="stylesheet" href="styles.css"> -->
-  <!-- <link rel="icon" href="/favicon.ico"> -->
 
-  <script src="/vendor/javascript/CCapture.all.min.js"></script>
+  <!-- <script src="/vendor/javascript/CCapture.all.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/ccapture.js@2/build/ccapture.umd.min.js"></script>
 
   <script type="importmap">
   { "imports":
@@ -34,19 +33,20 @@
   <br />
   <canvas id="canvas" width="854" height="460"></canvas>
 
-<script>
+<script type='module' >
 /* logg
 **/
 const logg = (a, b="", c=null) => {
   if ('undefined' === typeof window) { return }
 
-  c = "string" === typeof c ? c : b.replace(/\W/g, "");
+  c = "string" === typeof c ? c : b.replace(/\W/g, '');
   if (c.length > 0) {
     window[c] = a;
   }
   console.log(`+++ ${b}:`, a); // eslint-disable-line no-console
 };
 
+  // import { CCapture, renderAudioFrames } from "ccapture.js";
 
   const canvas = document.getElementById('canvas')
   const speech = document.getElementById('speech')
@@ -97,7 +97,7 @@ const logg = (a, b="", c=null) => {
 
 
 
-  const doCapture = () => {
+  const doCapture = async () => {
     if (animating) return
     animating = true
 
@@ -109,13 +109,18 @@ const logg = (a, b="", c=null) => {
     window._rafNative = window.requestAnimationFrame.bind(window)
     window._timeoutNative = window.setTimeout.bind(window)
 
+    const arrayBuffer = await (await fetch("speech.wav")).arrayBuffer()
+    const buffer = await new OfflineAudioContext(1, 1, 44100).decodeAudioData(arrayBuffer)
+    const audio = await renderAudioFrames({ buffer, fps, frames, fftSize: 1024 })
+
 
     capturer = new CCapture({
       format: 'webm',
       framerate: fps,
-      media: speech,
+      audio: buffer,
     })
     capturer.start()
+
 
     // Restore native timers so the canvas animates in real time
     window.requestAnimationFrame = window._rafNative
