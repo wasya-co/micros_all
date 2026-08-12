@@ -120,16 +120,24 @@
         // action="/wco/api/newsvideos/${params.get('newsvideo_id')}/generate-illustration"
 
         div.innerHTML = `
-        <form
-          action="/wco/newsvideos/${params.get('newsvideo_id')}/generate-illustration"
-          method="post"
-          target="_blank"
-          rel="noopener"
-        >
-          <input type="hidden" name="image_url" value="${photo.src.landscape}">
+
           <img class='photo-frame' src="${photo.src.landscape}" alt="${photo.alt || ''}">
-          <button type="submit" class="photo-frame-button">Generate Stable Diffusion Illustration</button>
-        </form>
+
+          <form action="/wco/newsvideos/${params.get('newsvideo_id')}/generate-illustration"
+                method="post"
+                target="_blank"
+                rel="noopener"
+          ><input type="hidden" name="image_url" value="${photo.src.landscape}">
+           <button type="submit" class="photo-frame-button">Generate Stable Diffusion Illustration</button>
+          </form>
+
+          <form action="/wco/newsvideos/${params.get('newsvideo_id')}/add-image-as-overlay"
+                method="post"
+                target="_blank"
+                rel="noopener"
+          ><input type="hidden" name="image_url" value="${photo.src.landscape}">
+           <button type="submit" class="photo-frame-button">Add as 3-sec overlay</button>
+          </form>
         `;
 
         results.appendChild(div);
