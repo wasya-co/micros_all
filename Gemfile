@@ -33,7 +33,7 @@ gem 'bcrypt_pbkdf', '~> 1.1.0'
 gem 'ffi', '~> 1.16.3'
 gem 'stringio', '3.1.2'
 gem 'net-imap'
-gem 'typesense'
+# gem 'typesense'
 gem 'googleauth'
 gem 'net-ssh'
 gem 'pragmatic_segmenter', '0.3.24'
@@ -53,7 +53,7 @@ end
 
 group :development do
   gem 'capistrano'
-  gem 'rack-mini-profiler', '~> 2.0'
+  # gem 'rack-mini-profiler', '~> 2.0'
   gem 'web-console', '>= 4.1.0'
 end
 
