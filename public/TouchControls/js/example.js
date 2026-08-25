@@ -1,3 +1,5 @@
+import TouchControls from "./touch-controls.js"
+
 var width, height;
 var viewAngle = 45,
 	near = 1,
