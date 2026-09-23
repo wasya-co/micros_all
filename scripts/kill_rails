@@ -11,3 +11,5 @@ else
   sudo kill -9 $pid
 fi
 
+echo "Done"
+

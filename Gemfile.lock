@@ -352,6 +352,8 @@ GEM
       mongoid
     mongoid_paranoia (0.6.0)
       mongoid (>= 7.3)
+    moonrope-client (1.0.5)
+      json
     multi_json (1.15.0)
     multi_xml (0.6.0)
     net-imap (0.4.17)
@@ -398,6 +400,8 @@ GEM
     os (1.1.4)
     ostruct (0.6.0)
     pdf-core (0.10.0)
+    postal-ruby (1.0.1)
+      moonrope-client (>= 1.0.2, < 1.1)
     pragmatic_segmenter (0.3.24)
     prawn (2.5.0)
       matrix (~> 0.4)
@@ -598,6 +602,7 @@ DEPENDENCIES
   nokogiri (~> 1.15.5)
   omniauth-keycloak (~> 1.5.1)
   omniauth-rails_csrf_protection (~> 1.0.1)
+  postal-ruby (~> 1.0)
   pragmatic_segmenter (= 0.3.24)
   psych (~> 5.0.1)
   puma (~> 5.0)

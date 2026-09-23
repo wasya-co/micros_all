@@ -5,6 +5,29 @@
     body {
       background: #efefef;
     }
+    .camera-helper {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.75);
+      border-radius: 8px;
+      z-index: 9999;
+    }
+    .camera-helper button {
+      min-width: 52px;
+      padding: 6px 8px;
+      border: 1px solid #666;
+      border-radius: 4px;
+      background: #fff;
+      color: #111;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+    }
   </style>
 
   <!-- Import maps polyfill -->
@@ -30,6 +53,17 @@
   <button id='speak'>Speak</button>
   <div id='avatar'></div>
   <div id='loading'>Loading...</div>
+  <div class="camera-helper">
+    <button data-axis="y" data-delta="10">+y</button>
+    <button data-axis="y" data-delta="-10">-y</button>
+    <button data-axis="x" data-delta="10">+x</button>
+    <button data-axis="x" data-delta="-10">-x</button>
+    <button data-axis="z" data-delta="10">+z</button>
+    <button data-axis="z" data-delta="-10">-z</button>
+    <button data-action="switch-camera">s</button>
+    <button data-action="copy-camera">cp</button>
+    <button data-action="toggle-camera-helpers">toggle camera helpers</button>
+  </div>
   <div id="rotatingC" class="r2" style="width: 640px;
     height: 480px;
     border: 1px solid red;
@@ -60,8 +94,9 @@
 
     const params = new URLSearchParams(window.location.search);
 
-    const w = 1024;
-    const h = 576;
+    const w = params.get('w_px');
+    const h = params.get('h_px');
+
     let config = {
         sampleRate: 8000,
         mood: 'neutral',
@@ -77,33 +112,92 @@
     const api_secret = params.get('api_secret')
     const wco_origin = params.get('wco_origin')
     const newspartial_id = params.get('newspartial_id')
-    let totalFrames
+    let totalFrames = Number.POSITIVE_INFINITY
 
-    let camera, controls, head, renderer, scene;
+    let camera, cameraA, cameraB, cameraAHelper, cameraBHelper, originAxesHelper, cameraHelpersVisible, capturing, controls, head, renderer, scene;
     var capturer = new CCapture( { format: 'webm', framerate: FPS } );
+    const CAMERA_STEP = 0.05;
+
+    function setupCameraHelper() {
+      const helperButtons = document.querySelectorAll('.camera-helper button');
+      helperButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          if (button.dataset.action === 'switch-camera') {
+            switchCamera();
+            return;
+          }
+          if (button.dataset.action === 'toggle-camera-helpers') {
+            toggleCameraHelpers();
+            return;
+          }
+          if (button.dataset.action === 'copy-camera') {
+            logCurrentCameraTransform();
+            return;
+          }
+          const axis = button.dataset.axis;
+          const direction = Number(button.dataset.delta);
+          camera.position[axis] += direction * CAMERA_STEP;
+          controls.update();
+        });
+      });
+    }
+
+    function switchCamera() {
+      camera = camera === cameraA ? cameraB : cameraA;
+      controls.object = camera;
+      controls.update();
+      if (head) {
+        head.avatarOnlyCamera = camera;
+      }
+    }
+
+    function setupCameraVisualAids() {
+      cameraAHelper = new THREE.CameraHelper(cameraA);
+      cameraBHelper = new THREE.CameraHelper(cameraB);
+      cameraHelpersVisible = true;
+      cameraAHelper.visible = cameraHelpersVisible;
+      cameraBHelper.visible = cameraHelpersVisible;
+      scene.add(cameraAHelper);
+      scene.add(cameraBHelper);
+    }
+
+    function toggleCameraHelpers() {
+      cameraHelpersVisible = !cameraHelpersVisible;
+      cameraAHelper.visible = cameraHelpersVisible;
+      cameraBHelper.visible = cameraHelpersVisible;
+    }
+
+    function logCurrentCameraTransform() {
+      const currentCameraName = camera === cameraA ? 'cameraA' : 'cameraB';
+      console.log(`[${currentCameraName}] position:`, camera.position.toArray() );
+      console.log(`[${currentCameraName}] rotation:`, camera.rotation.toArray());
+    }
+
 
     async function init() {
-      const url = wco_origin + '/wco/api/newspartials/' + newspartial_id + '/config.json?api_key=' + api_key + '&api_secret=' + api_secret
-      let chunkedInput = await fetch(url).then(r => r.json())
-      logg(chunkedInput, 'chunkedInput')
-      const last = chunkedInput.wtimes.length-1
-      const duration_ms = chunkedInput.wtimes[last] + chunkedInput.wdurations[last]
-      logg(duration_ms, 'duration_ms')
-      totalFrames = duration_ms/1000*FPS;
-
-
       // const container = document.createElement( 'div' )
       const loader = new GLTFLoader().setPath( '/vendor/models' )
       scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x666666);
+      originAxesHelper = new THREE.AxesHelper(1.5);
+      scene.add(originAxesHelper);
+
 
       /* fov — Camera frustum vertical field of view.
        * aspect — Camera frustum aspect ratio.
        * near — Camera frustum near plane.
        * far — Camera frustum far plane.
       **/
-      camera = new THREE.PerspectiveCamera( 10, w/h, 0.1, 10 )
-      camera.position.set( 1.86, 1.44, 1.00 )
-      camera.rotation.set( -.06, 0.73, 0.04 )
+      cameraA = new THREE.PerspectiveCamera( 10, w/h, 0.001, 1000 )
+      cameraA.position.fromArray([ 3.0512117263943934, 0.7239926700381756, 1.586727856157778 ])
+      cameraA.quaternion.set( -0.4280643400582541, 1.0515152293687262, 0.37716718081874623, 'XYZ' )
+
+      cameraB = new THREE.PerspectiveCamera( 10, w/h, 0.001, 1000 )
+      cameraB.position.set( 0.75, 1.15, 2.10 )
+      cameraB.rotation.set( -0.03, 0.25, 0.01 )
+
+      camera = cameraA;
+      setupCameraVisualAids();
 
       const ambientLight = new THREE.AmbientLight( 0xffffff );
       scene.add( ambientLight );
@@ -111,8 +205,6 @@
       // const pointLight = new THREE.PointLight( 0xffffff, 15 );
       // camera.add( pointLight );
       // scene.add( camera );
-
-
 
       // loader.load( '/cyberpunk-laptop/cyberpunk-laptop.glb', function ( gltf ) {
       //   $("#rotatingC span.label").css('display', 'none')
@@ -156,19 +248,16 @@
         scene.add(head.armature);
 
         await head.streamStart({
-              sampleRate: config.sampleRate,
-              mood: config.mood,
-              gain: config.gain,
-              lipsyncType: config.lipsyncType,
-              lipsyncLang: config.lipsyncLang,
-              waitForAudioChunks: config.waitForAudioChunks,
-              // Configure metrics: enabled/disabled and reporting rate
-              metrics: config.enableMetrics ? { enabled: true, intervalHz: config.metricsInterval } : { enabled: false }
-            })
+          sampleRate: config.sampleRate,
+          mood: config.mood,
+          gain: config.gain,
+          lipsyncType: config.lipsyncType,
+          lipsyncLang: config.lipsyncLang,
+          waitForAudioChunks: config.waitForAudioChunks,
+          // Configure metrics: enabled/disabled and reporting rate
+          metrics: config.enableMetrics ? { enabled: true, intervalHz: config.metricsInterval } : { enabled: false }
+        })
 
-        capturer.start();
-        logg('capturer.start')
-        head.streamAudio(chunkedInput);
 
       } catch (error) {
         console.log(error);
@@ -197,13 +286,12 @@
       controls.maxDistance = 100;
       controls.autoRotate = false;
       controls.update();
+      setupCameraHelper();
 
       //
 
       window.addEventListener( 'resize', onWindowResize );
 
-
-      // renderer.setAnimationLoop(animate);
       animate()
     }
 
@@ -216,8 +304,12 @@
     })
 
     function onWindowResize() {
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
+      cameraA.aspect = w / h;
+      cameraA.updateProjectionMatrix();
+      cameraB.aspect = w / h;
+      cameraB.updateProjectionMatrix();
+      cameraAHelper.update();
+      cameraBHelper.update();
       renderer.setSize( w, h );
       render();
     }
@@ -231,48 +323,67 @@
       head.animate(1000/FPS);
       controls.update();
       renderer.render( scene, camera );
-      capturer.capture( renderer.domElement );
+
+      if ('pending' == capturing) {
+        capturer.capture( renderer.domElement );
+        capturing = 'capturing'
+      }
 
       frame++;
       if (frame < totalFrames) {
         requestAnimationFrame(animate)
       } else {
-        capturer.stop();
-        logg('capturer.stop')
-        capturer.save((blob) => {
-          logg(blob, 'blob')
-          renderer.domElement.toBlob((thumb) => {
-            logg(thumb, 'thumb')
+        if ('capturing' == capturing) {
+          capturer.stop();
+          logg('capturer.stop')
+          capturer.save((blob) => {
+            logg(blob, 'blob')
+            renderer.domElement.toBlob((thumb) => {
+              logg(thumb, 'thumb')
 
-            const form = new FormData();
-            form.append('video', blob, 'lips.webm')
-            form.append('name', '<ccapturejs>')
-            form.append('thumb', thumb)
-            form.append('newspartial_id', newspartial_id)
+              const form = new FormData();
+              form.append('video', blob, 'lips.webm')
+              form.append('name', '<ccapturejs>')
+              form.append('thumb', thumb)
+              form.append('newspartial_id', newspartial_id)
 
-            fetch(wco_origin + '/wco/api/videos/?api_key=' + api_key + '&api_secret=' + api_secret, {
-              method: 'POST',
-              headers: {
-                // 'Content-Type': 'video/webm',
-              },
-              body: form,
+              fetch(wco_origin + '/wco/api/videos/?api_key=' + api_key + '&api_secret=' + api_secret, {
+                method: 'POST',
+                headers: {
+                  // 'Content-Type': 'video/webm',
+                },
+                body: form,
+              })
+
+              capturing = false
             })
-
           })
-        });
+        }
       }
     }
 
 
     // Speak when clicked
     const nodeSpeak = document.getElementById('speak');
-      nodeSpeak.addEventListener('click', function () {
-        try {
+    nodeSpeak.addEventListener('click', async function () {
+      try {
 
-        } catch (error) {
-          console.log(error);
-        }
-      });
+        const url = wco_origin + '/wco/api/newspartials/' + newspartial_id + '/config.json?api_key=' + api_key + '&api_secret=' + api_secret
+        let chunkedInput = await fetch(url).then(r => r.json())
+        const last = chunkedInput.wtimes.length - 1
+        const duration_ms = chunkedInput.wtimes[last] + chunkedInput.wdurations[last]
+        totalFrames = duration_ms / 1000 * FPS;
+        frame = 0;
+        capturing = 'pending';
+
+        capturer.start();
+        logg('capturer.start')
+        head.streamAudio(chunkedInput);
+
+      } catch (error) {
+        console.log(error);
+      }
+    });
 
 
   </script>
