@@ -1,0 +1,144 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ccapture Example</title>
+  <meta name="description" content="Page description">
+  <meta name="keywords" content="keyword1, keyword2">
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- <script src="/vendor/javascript/CCapture.all.min.js"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/ccapture.js@2/build/ccapture.umd.min.js"></script> -->
+
+  <script type="importmap">
+  { "imports":
+    {
+      "ccapture.js": "https://cdn.jsdelivr.net/npm/ccapture.js@2.0.0/src/index.js",
+      "ccapture.js/": "https://cdn.jsdelivr.net/npm/ccapture.js@2.0.0/src/",
+      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js/+esm",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/",
+      "talkinghead": "https://cdn.jsdelivr.net/gh/met4citizen/TalkingHead@1.7/modules/talkinghead.mjs"
+    }
+  }
+  </script>
+
+
+</head>
+<body>
+  <!-- <h1>Hello</h1> -->
+
+  <button id="start">Record</button>
+  <br />
+  <audio controls id='speech'>
+    <source src="speech.wav" type="audio/wav">
+    Your browser does not support the audio element.
+  </audio>
+  <br />
+  <canvas id="canvas" width="854" height="460"></canvas>
+
+<script type='module' >
+/* logg
+**/
+const logg = (a, b="", c=null) => {
+  if ('undefined' === typeof window) { return }
+
+  c = "string" === typeof c ? c : b.replace(/\W/g, '');
+  if (c.length > 0) {
+    window[c] = a;
+  }
+  console.log(`+++ ${b}:`, a); // eslint-disable-line no-console
+};
+
+  import { CCapture, renderAudioFrames } from "ccapture.js";
+
+  const canvas = document.getElementById('canvas')
+  const speech = document.getElementById('speech')
+  const ctx = canvas.getContext('2d')
+  const fps = 30
+  const duration = 6.5
+  const totalFrames = fps * duration
+
+  let capturer = null
+  let frame = 0
+  let animating = false
+
+  /*
+   * green to yellow
+  **/
+  let direction = 1
+  const speed = 0.01
+  let progress = 0
+
+  function draw() {
+    progress += speed * direction
+
+    if (progress >= 1 || progress <= 0) {
+      direction *= -1
+      progress = Math.max(0, Math.min(1, progress))
+    }
+
+    const red = Math.round(255 * progress)
+    ctx.fillStyle = `rgb(${red}, 255, 0)`
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+  }
+
+  function animate() {
+    draw()
+    capturer.capture(canvas)
+    frame++
+    // logg(frame, 'frame')
+
+    if (frame < totalFrames) {
+      // Native timer (saved before capturer.start) so playback is visible at fps
+      window._timeoutNative(animate, 1000 / fps)
+    } else {
+      animating = false
+      capturer.stop()
+      capturer.save()
+    }
+  }
+
+
+
+  const doCapture = async () => {
+    if (animating) return
+    animating = true
+
+    frame = 0
+    progress = 0
+    direction = 1
+
+    // Save real timers before CCapture hooks them
+    window._rafNative = window.requestAnimationFrame.bind(window)
+    window._timeoutNative = window.setTimeout.bind(window)
+
+    const arrayBuffer = await (await fetch("speech.wav")).arrayBuffer()
+    const buffer = await new AudioContext().decodeAudioData(arrayBuffer.slice(0))
+    const frames = Math.max(1, Math.ceil(buffer.duration * fps))
+    const audio = await renderAudioFrames({ buffer, framerate: fps, frames, fftSize: 1024 })
+
+
+    capturer = new CCapture({
+      format: 'webm',
+      framerate: fps,
+      audio: buffer,
+    })
+    capturer.start()
+
+
+    // Restore native timers so the canvas animates in real time
+    window.requestAnimationFrame = window._rafNative
+    window.setTimeout = window._timeoutNative
+
+    animate()
+  }
+
+  // initial frame so the canvas isn't blank
+  ctx.fillStyle = 'rgb(0, 255, 0)'
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+  document.getElementById('start').addEventListener('click', doCapture)
+</script>
+
+
+</body></html>

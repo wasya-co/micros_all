@@ -1,10 +1,10 @@
 require "active_support/core_ext/integer/time"
 
-Rails.application.routes.default_url_options[:host] = "email.local:3004"
+Rails.application.routes.default_url_options[:host] = "email.local:3002"
 Rails.application.configure do
   config.hosts << "email.local"
 
-  config.hosts << "2cce-191-156-38-189.ngrok-free.app"
+  # config.hosts << "2cce-191-156-38-189.ngrok-free.app"
 
   config.cache_classes = false
   config.eager_load    = false
@@ -34,13 +34,18 @@ Rails.application.configure do
 
 end
 
+=begin
+
+  ExceptionNotifier.notify_exception( RuntimeError.new("manual test") )
+
+=end
 # Rails.application.config.middleware.use ExceptionNotification::Rack,
 #   email: {
 #     deliver_with: :deliver,
 #     email_prefix: '[Email] ',
-#     sender_address: %{micros_email <no-reply@wasya.co>},
-#     exception_recipients: %w{poxlovi+zebradoc1@gmail.com}
+#     sender_address: %{ "Pi notifier" piousbox@gmail.com },
+#     exception_recipients: [ "poxlovi+zebradoc1@gmail.com" ],
 #   }
 
-DEBUG = true
+# DEBUG = true
 

@@ -3,8 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.5'
 
-gem 'ahoy_matey'
-
+gem 'commonmarker'
 gem 'bcrypt', '~> 3.1.7'
 gem 'colorize'
 gem 'devise',                         "~> 4.9.3"
@@ -34,13 +33,13 @@ gem 'bcrypt_pbkdf', '~> 1.1.0'
 gem 'ffi', '~> 1.16.3'
 gem 'stringio', '3.1.2'
 gem 'net-imap'
-gem 'typesense'
+# gem 'typesense'
 gem 'googleauth'
 gem 'net-ssh'
 gem 'pragmatic_segmenter', '0.3.24'
 gem 'postal-ruby', '~> 1.0'
 
-gem 'wco_models',   github: 'wasya-co/wco_models',     branch: '3.3.1'
+gem 'wco_models',   github: 'wasya-co/wco_models',     branch: '3.4.0'
 gem 'wco_email',    github: 'wasya-co/wco_email_rb',   branch: '0.0.0'
 gem 'wco_hosting',  github: 'wasya-co/wco_hosting_rb', branch: '0.0.0'
 gem 'iron_warbler', github: 'wasya-co/iron_warbler',   branch: '2.3.0'
@@ -55,7 +54,7 @@ end
 
 group :development do
   gem 'capistrano'
-  gem 'rack-mini-profiler', '~> 2.0'
+  # gem 'rack-mini-profiler', '~> 2.0'
   gem 'web-console', '>= 4.1.0'
 end
 

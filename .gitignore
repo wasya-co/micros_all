@@ -4,10 +4,12 @@ access
 /.bundle
 .byebug_history
 
+/caddy.log
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 /config/initializers/0*
 !/config/initializers/0*-example
+/config/ssl
 
 /db/*.sqlite3
 /db/*.sqlite3-*
@@ -25,6 +27,7 @@ google-services.json
 /node_modules
 
 /public/assets
+/public/vendor/models
 /public/packs
 /public/packs-test
 
