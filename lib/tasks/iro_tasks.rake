@@ -16,6 +16,7 @@ namespace :iro do
   # end
 
   ## 2023-03-31 _vp_ Done, unused.
+=begin
   desc 'alert stocks test'
   task alert_stocks_test: :environment do
     tickers_str = Iro::OptionWatch.active.where( kind: ::Iro::OptionWatch::KIND_STOCK ).map(&:ticker).join(',')
@@ -32,9 +33,9 @@ namespace :iro do
 
         end
       end
-
     end
   end
+=end
 
   ## 2023-02-04 _vp_ :: Continue
   ## 2023-02-06 _vp_ :: LFG
@@ -68,11 +69,11 @@ namespace :iro do
     puts 'ok'
   end
 
-  desc 'get gme short %'
-  task :get_gme_short_availability_and_fee => :environment do
-    errors = ::Iro::Iro.get_gme_short_availability_and_fee
-    puts errors.presence || '.'
-  end
+  # desc 'get gme short %'
+  # task :get_gme_short_availability_and_fee => :environment do
+  #   errors = ::Iro::Iro.get_gme_short_availability_and_fee
+  #   puts errors.presence || '.'
+  # end
 
   ## 2023-03-10 _vp_ Continue.
   desc 'get stocks'
